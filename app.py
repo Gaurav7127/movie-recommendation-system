@@ -6,26 +6,25 @@ import time
 import base64
 import os
 
-# Function to fetch poster from TMDB API
+# Load API Key from Environment Variable (Replace with your key or use dotenv)
 def fetch_poster(movie_id, retries=2, delay=3):
     api_key = '8d45dcb1eefec0761446c65d574e58a6'  # Replace with your actual API key
     url = f'https://api.themoviedb.org/3/movie/{movie_id}?api_key={api_key}&language=en-US'
 
     for attempt in range(retries):
         try:
-            response = requests.get(url, timeout=5)
+            response = requests.get(url, timeout=5)  # Added timeout to prevent infinite waits
             response.raise_for_status()
             data = response.json()
             poster_path = data.get('poster_path')
             return f'https://image.tmdb.org/t/p/w500/{poster_path}' if poster_path else "Poster not available."
-        except requests.exceptions.RequestException:
+        except requests.exceptions.RequestException as e:
             if attempt < retries - 1:
-                time.sleep(delay)
+                time.sleep(delay)  # Wait and retry
                 continue
             return "Error fetching poster"
 
 
-# Recommendation function
 def recommend(movie):
     try:
         if movie not in movies['title'].values:
@@ -39,23 +38,34 @@ def recommend(movie):
         recommend_movies_posters = [fetch_poster(movies.iloc[i[0]].movie_id) for i in movie_list]
 
         return recommend_movies, recommend_movies_posters
-    except Exception:
+    except Exception as e:
         return ["Error occurred"], [""]
 
 
-# Load movie data using joblib
-movies_dict = joblib.load('movies_dict_compressed.pkl')
-movies = pd.DataFrame(movies_dict)
-similarity = joblib.load('similarity_compressed.pkl')
+# Load movie data
+def load_data(file_path):
+    try:
+        return joblib.load(file_path)
+    except (EOFError, FileNotFoundError) as e:
+        st.error(f"Error loading {file_path}: {e}")
+        return None
 
+movies_dict = load_data('movies_dict_compressed.pkl.z')
+if movies_dict is not None:
+    movies = pd.DataFrame(movies_dict)
+else:
+    st.stop()
 
-# Function to load background image
+similarity = load_data('similarity_compressed.pkl.z')
+if similarity is None:
+    st.stop()
+
+# Load background image
 def get_base64_image(image_path):
     if os.path.exists(image_path):
         with open(image_path, "rb") as img_file:
             return base64.b64encode(img_file.read()).decode()
     return None
-
 
 bg_image = get_base64_image('234234-1140x641.jpg')
 
@@ -71,44 +81,44 @@ if bg_image:
             background-repeat: no-repeat;
         }}
         .title {{
-            font-size: 50px;
-            color: #FFFFFF;
+            font-size: 50px; 
+            color: #FFFFFF;  
             text-align: center;
-            font-family: 'Arial', sans-serif;
-            padding: 20px 0;
+            font-family: 'Arial', sans-serif;  
+            padding: 20px 0;  
         }}
         .selectbox-container {{
             text-align: left;
-            margin: 5px 0;
+            margin: 5px 0; 
         }}
         .selectbox-label {{
-            font-size: 16px;
-            color: #FFFFFF;
-            font-family: 'Arial', sans-serif;
-            margin-bottom: 10px;
+            font-size: 16px; 
+            color: #FFFFFF;  
+            font-family: 'Arial', sans-serif; 
+            margin-bottom: 10px;  
         }}
         .custom-selectbox select {{
-            font-size: 18px;
-            color: #4682B4;
-            padding: 10px;
-            border-radius: 5px;
-            border: 2px solid #4B0082;
-            background-color: #f0f8ff;
+            font-size: 18px;  
+            color: #4682B4; 
+            padding: 10px;  
+            border-radius: 5px;  
+            border: 2px solid #4B0082; 
+            background-color: #f0f8ff; 
         }}
         .movie-title {{
-            font-size: 20px;
-            color: #FFFFFF;
-            margin-bottom: 10px;
+            font-size: 20px; 
+            color: #FFFFFF;  
+            margin-bottom: 10px; 
         }}
         .movie-poster {{
-            height: 200px;
-            width: 400px;
-            border-radius: 10px;
-            border: 2px solid #FFFFFF;
+            height: 200px;  
+            width: 400px;   
+            border-radius: 10px;  
+            border: 2px solid #FFFFFF;  
         }}
         .poster-container {{
             text-align: center;
-            padding: 10px;
+            padding: 10px; 
         }}
         </style>
         """,
