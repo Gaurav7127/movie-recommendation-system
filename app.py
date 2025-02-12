@@ -86,7 +86,7 @@ if bg_image:
     
   
     .title {{
-        font-size: 50px;
+        font-size: 55px;
         color: #FFFFFF;
         text-align: center;
         font-family: 'Arial', sans-serif;
@@ -143,7 +143,7 @@ if bg_image:
      
     @media (max-width: 1024px) {{
         .title {{
-            font-size: 40px;
+            font-size: 55px;
         }}
         .subtitle {{
             font-size: 18px;
@@ -157,7 +157,7 @@ if bg_image:
     
     @media (max-width: 768px) {{
         .title {{
-            font-size: 30px;
+            font-size: 45px;
         }}
         .subtitle {{
             font-size: 16px;
