@@ -178,8 +178,9 @@ st.markdown('<h1 class="title">MovieMatch</h1>', unsafe_allow_html=True)
 st.markdown('<div class="subtitle">The Right Film, Every Time</div>', unsafe_allow_html=True)
 
 
-st.markdown('<div class="selectbox-container"><div class="selectbox-label">Find your next watch</div></div>',
+st.markdown('<div class="selectbox-container"><div class="selectbox-label">🎬 Find your next watch 🍿</div></div>',
             unsafe_allow_html=True)
+
 selected_movie_name = st.selectbox('', movies['title'].values, key='movie_selectbox')
 
 
