@@ -74,10 +74,10 @@ bg_image = get_base64_image('234234-1140x641.jpg')
 # Streamlit UI Styling
 if bg_image:
     # CSS Styling for responsiveness
-st.markdown(
-    f"""
-    <style>
-    .stApp {{
+    st.markdown(
+        f"""
+        <style>
+        .stApp {{
         background-image: url("data:image/jpeg;base64,{bg_image}");
         background-size: cover;
         background-position: center;
