@@ -83,7 +83,7 @@ if bg_image:
             background-repeat: no-repeat;
         }}
         .title {{
-            font-size: 50px; 
+            font-size: 60px; 
             color: #FFFFFF;  
             text-align: center;
             font-family: 'Arial', sans-serif;  
