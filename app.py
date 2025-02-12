@@ -75,72 +75,104 @@ bg_image = get_base64_image('234234-1140x641.jpg')
 
 if bg_image:
     st.markdown(
-        f"""
-        <style>
-        .stApp {{
-            background-image: url("data:image/jpeg;base64,{bg_image}");
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-        }}
+    f"""
+    <style>
+    .stApp {{
+        background-image: url("data:image/jpeg;base64,{bg_image}");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }}
+    .title {{
+        font-size: 55px; 
+        color: #FFFFFF;  
+        text-align: center;
+        font-family: 'Arial', sans-serif;  
+        padding: 10px 0;
+        margin: 0;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);  /* Added shadow for readability */
+    }}
+    .subtitle {{
+        font-size: 22px; 
+        color: #FFD700;  
+        text-align: center;
+        font-family: 'Arial', sans-serif;  
+        margin-top: -10px;  
+        padding-bottom: 20px;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);  
+    }}
+    .selectbox-container {{
+        text-align: center;
+        margin: 5px 0; 
+    }}
+    .selectbox-label {{
+        font-size: 18px; 
+         text-align: left;
+        color: #FFFFFF;  
+        font-family: 'Arial', sans-serif; 
+        margin-bottom: 10px;  
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);  
+    }}
+    .custom-selectbox select {{
+        font-size: 18px;  
+        color: #333333; 
+        padding: 10px;  
+        border-radius: 5px;  
+        border: 2px solid #4B0082; 
+        background-color: #f0f8ff; 
+    }}
+    .movie-title {{
+        font-size: 20px; 
+        color: #FFFFFF;  
+        margin-bottom: 10px; 
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+    }}
+    .movie-poster {{
+        height: 250px;  
+        width: 170px;   
+        border-radius: 10px;  
+        border: 2px solid #FFFFFF;  
+    }}
+    .poster-container {{
+        text-align: center;
+        padding: 10px; 
+    }}
+
+    /* Responsiveness for tablets */
+    @media (max-width: 1024px) {{
         .title {{
-            font-size: 50px; 
-            color: #FFFFFF;  
-            text-align: center;
-            font-family: 'Arial', sans-serif;  
-            padding: 10px 0;
-            margin: 0;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);  
+            font-size: 55px;
         }}
         .subtitle {{
-            font-size: 18px; 
-            color: #FFD700;  
-            text-align: center;
-            font-family: 'Arial', sans-serif;  
-            margin-top: -10px;  
-            padding-bottom: 20px;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);  /* Subtle shadow */
-        }}
-        .selectbox-container {{
-            text-align: center;
-            margin: 5px 0; 
-        }}
-        .selectbox-label {{
-            font-size: 18px; 
-            text-align: right;
-            color: #FFFFFF;  
-            font-family: 'Arial', sans-serif; 
-            margin-bottom: 10px;  
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);  
-        }}
-        .custom-selectbox select {{
-            font-size: 18px;  
-            color: #333333; 
-            padding: 10px;  
-            border-radius: 5px;  
-            border: 2px solid #4B0082; 
-            background-color: #f0f8ff; 
-        }}
-        .movie-title {{
-            font-size: 20px; 
-            color: #FFFFFF;  
-            margin-bottom: 10px; 
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+            font-size: 25px;
         }}
         .movie-poster {{
-            height: 220px;  
-            width: 150px;   
-            border-radius: 10px;  
-            border: 2px solid #FFFFFF;  
+            height: 240px;
+            width: 160px;
         }}
-        .poster-container {{
-            text-align: center;
-            padding: 10px; 
+    }}
+
+    /* Responsiveness for mobile devices */
+    @media (max-width: 768px) {{
+        .title {{
+            font-size: 45px;
         }}
-        </style>
-        """,
-        unsafe_allow_html=True
-    )
+        .subtitle {{
+            font-size: 20px;
+        }}
+        .movie-poster {{
+            height: 200px;
+            width: 140px;
+        }}
+        .selectbox-label {{
+            font-size: 16px;
+        }}
+    }}
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 
 st.markdown('<h1 class="title">MovieMatch</h1>', unsafe_allow_html=True)
 st.markdown('<div class="subtitle">The Right Film, Every Time</div>', unsafe_allow_html=True)
