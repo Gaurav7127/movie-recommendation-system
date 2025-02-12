@@ -26,14 +26,14 @@ def fetch_poster(movie_id, retries=2, delay=3):
 
     for attempt in range(retries):
         try:
-            response = requests.get(url, timeout=5)
+            response = requests.get(url, timeout=5)  # Added timeout to prevent infinite waits
             response.raise_for_status()
             data = response.json()
             poster_path = data.get('poster_path')
             return f'https://image.tmdb.org/t/p/w500/{poster_path}' if poster_path else "Poster not available."
-        except requests.exceptions.RequestException:
+        except requests.exceptions.RequestException as e:
             if attempt < retries - 1:
-                time.sleep(delay)
+                time.sleep(delay)  # Wait and retry
                 continue
             return "Error fetching poster"
 
@@ -51,7 +51,7 @@ def recommend(movie):
         recommend_movies_posters = [fetch_poster(movies.iloc[i[0]].movie_id) for i in movie_list]
 
         return recommend_movies, recommend_movies_posters
-    except Exception:
+    except Exception as e:
         return ["Error occurred"], [""]
 
 
@@ -87,14 +87,16 @@ if bg_image:
             color: #FFFFFF;  
             text-align: center;
             font-family: 'Arial', sans-serif;  
-            padding: 10px 0;  
+            padding: 10px 0;
+            margin: 0;
         }}
         .subtitle {{
-            font-size: 20px;
-            color: #FFFFFF;
+            font-size: 20px; 
+            color: #FFFFFF;  
             text-align: center;
-            font-family: 'Arial', sans-serif;
-            margin-bottom: 20px;
+            font-family: 'Arial', sans-serif;  
+            margin-top: -10px;  
+            padding-bottom: 20px;
         }}
         .selectbox-container {{
             text-align: left;
@@ -135,7 +137,7 @@ if bg_image:
     )
 
 # Streamlit UI Components
-st.markdown('<h1 class="title">  MovieMatch</h1>', unsafe_allow_html=True)
+st.markdown('<h1 class="title">MovieMatch</h1>', unsafe_allow_html=True)
 st.markdown('<div class="subtitle">The Right Film, Every Time</div>', unsafe_allow_html=True)
 
 st.markdown('<div class="selectbox-container"><div class="selectbox-label">Find your next watch</div></div>',
@@ -146,6 +148,7 @@ selected_movie_name = st.selectbox('', movies['title'].values, key='movie_select
 if st.button('Lets Goo 🚀'):
     names, posters = recommend(selected_movie_name)
 
+    # Dynamically adjust columns based on recommendations
     cols = st.columns(min(5, len(names)))
 
     for col, name, poster in zip(cols, names, posters):
