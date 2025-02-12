@@ -73,88 +73,129 @@ bg_image = get_base64_image('234234-1140x641.jpg')
 
 # Streamlit UI Styling
 if bg_image:
-    st.markdown(
-        f"""
-        <style>
-        .stApp {{
-            background-image: url("data:image/jpeg;base64,{bg_image}");
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-        }}
+    # CSS Styling for responsiveness
+st.markdown(
+    f"""
+    <style>
+    .stApp {{
+        background-image: url("data:image/jpeg;base64,{bg_image}");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }}
+    
+    /* Title and Subtitle styling */
+    .title {{
+        font-size: 50px;
+        color: #FFFFFF;
+        text-align: center;
+        font-family: 'Arial', sans-serif;
+        padding: 10px 0;
+        margin: 0;
+    }}
+    .subtitle {{
+        font-size: 20px;
+        color: #FFFFFF;
+        text-align: center;
+        font-family: 'Arial', sans-serif;
+        margin-top: -10px;
+        padding-bottom: 20px;
+    }}
+
+    /* Selectbox and Button */
+    .selectbox-container {{
+        text-align: left;
+        margin: 5px 0;
+    }}
+    .selectbox-label {{
+        font-size: 16px;
+        color: #FFFFFF;
+        font-family: 'Arial', sans-serif;
+        margin-bottom: 10px;
+    }}
+    .custom-selectbox select {{
+        font-size: 18px;
+        color: #4682B4;
+        padding: 10px;
+        border-radius: 5px;
+        border: 2px solid #4B0082;
+        background-color: #f0f8ff;
+    }}
+
+    /* Movie Poster & Title */
+    .movie-title {{
+        font-size: 20px;
+        color: #FFFFFF;
+        margin-bottom: 10px;
+    }}
+    .movie-poster {{
+        height: 250px;
+        width: auto;
+        max-width: 100%;
+        border-radius: 10px;
+        border: 2px solid #FFFFFF;
+    }}
+    .poster-container {{
+        text-align: center;
+        padding: 10px;
+    }}
+
+    /* Responsive Media Queries */
+    @media (max-width: 768px) {{
         .title {{
-            font-size: 60px; 
-            color: #FFFFFF;  
-            text-align: center;
-            font-family: 'Arial', sans-serif;  
-            padding: 10px 0;
-            margin: 0;
+            font-size: 35px;
         }}
         .subtitle {{
-            font-size: 25px; 
-            color: #FFFFFF;  
-            text-align: center;
-            font-family: 'Arial', sans-serif;  
-            margin-top: -10px;  
-            padding-bottom: 20px;
-        }}
-        .selectbox-container {{
-            text-align: left;
-            margin: 5px 0; 
-        }}
-        .selectbox-label {{
-            font-size: 16px; 
-            color: #FFFFFF;  
-            font-family: 'Arial', sans-serif; 
-            margin-bottom: 10px;  
-        }}
-        .custom-selectbox select {{
-            font-size: 18px;  
-            color: #4682B4; 
-            padding: 10px;  
-            border-radius: 5px;  
-            border: 2px solid #4B0082; 
-            background-color: #f0f8ff; 
+            font-size: 16px;
         }}
         .movie-title {{
-            font-size: 20px; 
-            color: #FFFFFF;  
-            margin-bottom: 10px; 
+            font-size: 16px;
         }}
         .movie-poster {{
-            height: 200px;  
-            width: 400px;   
-            border-radius: 10px;  
-            border: 2px solid #FFFFFF;  
+            height: 180px;
         }}
-        .poster-container {{
-            text-align: center;
-            padding: 10px; 
+    }}
+    
+    @media (max-width: 480px) {{
+        .title {{
+            font-size: 28px;
         }}
-        </style>
-        """,
-        unsafe_allow_html=True
-    )
+        .subtitle {{
+            font-size: 14px;
+        }}
+        .movie-title {{
+            font-size: 14px;
+        }}
+        .movie-poster {{
+            height: 150px;
+        }}
+    }}
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
-# Streamlit UI Components
+# Title and Subtitle
 st.markdown('<h1 class="title">MovieMatch</h1>', unsafe_allow_html=True)
-st.markdown('<div class="subtitle">The Right Film,Every Time</div>', unsafe_allow_html=True)
+st.markdown('<div class="subtitle">The Right Film, Every Time</div>', unsafe_allow_html=True)
 
+# Select Box
 st.markdown('<div class="selectbox-container"><div class="selectbox-label">Find your next watch</div></div>',
             unsafe_allow_html=True)
-
 selected_movie_name = st.selectbox('', movies['title'].values, key='movie_selectbox')
 
+# Button and Recommendation Display
 if st.button('Lets Goo 🚀'):
     names, posters = recommend(selected_movie_name)
-
-    # Dynamically adjust columns based on recommendations
-    cols = st.columns(min(5, len(names)))
-
+    
+    # Dynamically adjust columns based on the number of recommendations
+    num_cols = min(5, len(names))  # Max 5 columns for wider screens
+    cols = st.columns(num_cols)
+    
     for col, name, poster in zip(cols, names, posters):
         col.markdown(
             f'''
-            <div class="poster-container" style="text-align:center;">
+            <div class="poster-container">
                 <p class="movie-title">{name}</p>
                 <img src="{poster}" class="movie-poster"/>
             </div>
