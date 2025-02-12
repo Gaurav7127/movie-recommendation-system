@@ -5,7 +5,7 @@ import requests
 import time
 import base64
 import os
-gdown
+import gdown
 
 # Download files from Google Drive
 gdown.download('https://drive.google.com/uc?id=1CUX_tGSQAiesw6lq1vEOzSMSHJMFo0xl', 'movies_dict.pkl', quiet=False)
