@@ -155,7 +155,7 @@ if bg_image:
     /* Responsiveness for mobile devices */
     @media (max-width: 768px) {{
         .title {{
-            font-size: 20px;
+            font-size: 23px;
         }}
         .subtitle {{
             font-size: 15px;
