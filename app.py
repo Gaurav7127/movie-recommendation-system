@@ -82,21 +82,16 @@ if bg_image:
             background-position: center;
             background-repeat: no-repeat;
         }}
-        .title {{
-            font-size: 60px; 
-            color: #FFFFFF;  
+        .title {
+            font-size: 60px;
+            font-weight: bold;
             text-align: center;
-            font-family: 'Arial', sans-serif;  
-            padding: 10px 0;
-            margin: 0;
+            margin-bottom: 0;
         }}
-        .subtitle {{
-            font-size: 20px; 
-            color: #FFFFFF;  
+        .subtitle {
+            font-size: 20px;
             text-align: center;
-            font-family: 'Arial', sans-serif;  
-            margin-top: -10px;  
-            padding-bottom: 20px;
+            margin-top: 0;
         }}
         .selectbox-container {{
             text-align: left;
