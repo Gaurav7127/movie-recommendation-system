@@ -6,7 +6,7 @@ import base64
 import os
 import gdown
 
-# Download files from Google Drive
+
 movies_url = 'https://drive.google.com/uc?id=1CUX_tGSQAiesw6lq1vEOzSMSHJMFo0xl'
 similarity_url = 'https://drive.google.com/uc?id=1cau-WUZR1F1TszqManqqkpigga43nC_g'
 
@@ -55,13 +55,13 @@ def recommend(movie):
         return ["Error occurred"], [""]
 
 
-# Load movie data
+
 movies_dict = pd.read_pickle(movies_file)
 movies = pd.DataFrame(movies_dict)
 similarity = pd.read_pickle(similarity_file)
 
 
-# Load background image
+
 def get_base64_image(image_path):
     if os.path.exists(image_path):
         with open(image_path, "rb") as img_file:
@@ -71,9 +71,9 @@ def get_base64_image(image_path):
 
 bg_image = get_base64_image('234234-1140x641.jpg')
 
-# Streamlit UI Styling
+
 if bg_image:
-    # CSS Styling for responsiveness
+ 
     st.markdown(
         f"""
         <style>
@@ -84,7 +84,7 @@ if bg_image:
         background-repeat: no-repeat;
     }}
     
-    /* Title and Subtitle styling */
+  
     .title {{
         font-size: 50px;
         color: #FFFFFF;
@@ -102,7 +102,7 @@ if bg_image:
         padding-bottom: 20px;
     }}
 
-    /* Selectbox and Button */
+   
     .selectbox-container {{
         text-align: left;
         margin: 5px 0;
@@ -140,55 +140,53 @@ if bg_image:
         padding: 10px;
     }}
 
-    /* Responsive Media Queries */
-    @media (max-width: 768px) {{
+     
+    @media (max-width: 1024px) {{
         .title {{
-            font-size: 35px;
+            font-size: 40px;
         }}
         .subtitle {{
-            font-size: 16px;
+            font-size: 18px;
         }}
-        .movie-title {{
+        .movie-poster {{
+            height: 220px;
+            width: 150px;
+        }}
+    }}
+
+    
+    @media (max-width: 768px) {{
+        .title {{
+            font-size: 30px;
+        }}
+        .subtitle {{
             font-size: 16px;
         }}
         .movie-poster {{
             height: 180px;
+            width: 120px;
         }}
-    }}
-    
-    @media (max-width: 480px) {{
-        .title {{
-            font-size: 28px;
-        }}
-        .subtitle {{
+        .selectbox-label {{
             font-size: 14px;
-        }}
-        .movie-title {{
-            font-size: 14px;
-        }}
-        .movie-poster {{
-            height: 150px;
         }}
     }}
     </style>
     """,
     unsafe_allow_html=True
 )
-
-# Title and Subtitle
 st.markdown('<h1 class="title">MovieMatch</h1>', unsafe_allow_html=True)
 st.markdown('<div class="subtitle">The Right Film, Every Time</div>', unsafe_allow_html=True)
 
-# Select Box
+
 st.markdown('<div class="selectbox-container"><div class="selectbox-label">Find your next watch</div></div>',
             unsafe_allow_html=True)
 selected_movie_name = st.selectbox('', movies['title'].values, key='movie_selectbox')
 
-# Button and Recommendation Display
+
 if st.button('Lets Goo 🚀'):
     names, posters = recommend(selected_movie_name)
     
-    # Dynamically adjust columns based on the number of recommendations
+    
     num_cols = min(5, len(names))  # Max 5 columns for wider screens
     cols = st.columns(num_cols)
     
