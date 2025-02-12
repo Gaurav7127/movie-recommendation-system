@@ -158,7 +158,7 @@ if bg_image:
             font-size: 20px;
         }}
         .subtitle {{
-            font-size: 18px;
+            font-size: 15px;
         }}
         .movie-poster {{
             height: 200px;
