@@ -1,80 +1,67 @@
 import streamlit as st
+import pickle
 import pandas as pd
 import requests
 import time
 import base64
-import gdown
 import os
+gdown
 
-# Function to download files from Google Drive
-def download_file_from_gdrive(url, output_path):
-    file_id = url.split('/d/')[1].split('/')[0]
-    download_url = f'https://drive.google.com/uc?id={file_id}'
-    gdown.download(download_url, output_path, quiet=False)
+# Download files from Google Drive
+gdown.download('https://drive.google.com/uc?id=1CUX_tGSQAiesw6lq1vEOzSMSHJMFo0xl', 'movies_dict.pkl', quiet=False)
+gdown.download('https://drive.google.com/uc?id=1cau-WUZR1F1TszqManqqkpigga43nC_g', 'similarity.pkl', quiet=False)
 
-# Download the files if not already present
-if not os.path.exists('movies_dict.pkl'):
-    download_file_from_gdrive('https://drive.google.com/file/d/1CUX_tGSQAiesw6lq1vEOzSMSHJMFo0xl/view?usp=drive_link', 'movies_dict.pkl')
-
-if not os.path.exists('similarity.pkl'):
-    download_file_from_gdrive('https://drive.google.com/file/d/1cau-WUZR1F1TszqManqqkpigga43nC_g/view?usp=drive_link', 'similarity.pkl')
-
-# Function to fetch movie poster
+# Load API Key from Environment Variable (Replace with your key or use dotenv)
 def fetch_poster(movie_id, retries=2, delay=3):
     api_key = '8d45dcb1eefec0761446c65d574e58a6'  # Replace with your actual API key
     url = f'https://api.themoviedb.org/3/movie/{movie_id}?api_key={api_key}&language=en-US'
 
     for attempt in range(retries):
         try:
-            response = requests.get(url, timeout=5)
+            response = requests.get(url, timeout=5)  # Added timeout to prevent infinite waits
             response.raise_for_status()
             data = response.json()
             poster_path = data.get('poster_path')
             return f'https://image.tmdb.org/t/p/w500/{poster_path}' if poster_path else "Poster not available."
         except requests.exceptions.RequestException as e:
             if attempt < retries - 1:
-                time.sleep(delay)
+                time.sleep(delay)  # Wait and retry
                 continue
             return "Error fetching poster"
 
-# Function to recommend movies
+
 def recommend(movie):
-    if movie not in movies['title'].values:
-        return ["Movie not found"], [""]
 
-    movie_index = movies[movies['title'] == movie].index[0]
+    try:
+        if movie not in movies['title'].values:
+            return ["Movie not found"], [""]
 
-    if movie_index >= len(similarity):
-        return ["Similarity index out of range"], [""]
+        movie_index = movies[movies['title'] == movie].index[0]
+        distances = similarity[movie_index]
+        movie_list = sorted(list(enumerate(distances)), reverse=True, key=lambda x: x[1])[1:6]
 
-    distances = similarity[movie_index]
-    movie_list = sorted(list(enumerate(distances)), reverse=True, key=lambda x: x[1])[1:6]
+        recommend_movies = [movies.iloc[i[0]].title for i in movie_list]
+        recommend_movies_posters = [fetch_poster(movies.iloc[i[0]].movie_id) for i in movie_list]
 
-    recommend_movies = []
-    recommend_movies_posters = []
+        return recommend_movies, recommend_movies_posters
+    except Exception as e:
+        return ["Error occurred"], [""]
 
-    for i in movie_list:
-        if i[0] < len(movies):
-            movie_id = movies.iloc[i[0]].movie_id
-            recommend_movies.append(movies.iloc[i[0]].title)
-            recommend_movies_posters.append(fetch_poster(movie_id))
-        else:
-            recommend_movies.append("Movie ID not found")
-            recommend_movies_posters.append("")
-
-    return recommend_movies, recommend_movies_posters
 
 # Load movie data
-movies_dict = pd.read_pickle('movies_dict.pkl')
+movies_dict = pickle.load(open('movies_dict.pkl', 'rb'))
 movies = pd.DataFrame(movies_dict)
-similarity = pd.read_pickle('similarity.pkl')
+similarity = pickle.load(open('similarity.pkl', 'rb'))
+
 
 # Load background image
 def get_base64_image(image_path):
+
     if os.path.exists(image_path):
         with open(image_path, "rb") as img_file:
             return base64.b64encode(img_file.read()).decode()
     return None
+
 
 bg_image = get_base64_image('234234-1140x641.jpg')
 
@@ -135,7 +122,7 @@ if bg_image:
     )
 
 # Streamlit UI Components
-st.markdown('<h1 class="title">Movie Recommender System</h1>', unsafe_allow_html=True)
+st.markdown('<h1 class="title">CineMate - Your Movie Recommender</h1>', unsafe_allow_html=True)
 
 st.markdown('<div class="selectbox-container"><div class="selectbox-label">Find your next watch</div></div>',
             unsafe_allow_html=True)
