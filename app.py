@@ -1,64 +1,73 @@
 import streamlit as st
-import joblib
 import pandas as pd
 import requests
 import time
 import base64
+import gdown
 import os
 
-# Load API Key from Environment Variable (Replace with your key or use dotenv)
+# Function to download files from Google Drive
+def download_file_from_gdrive(url, output_path):
+    file_id = url.split('/d/')[1].split('/')[0]
+    download_url = f'https://drive.google.com/uc?id={file_id}'
+    gdown.download(download_url, output_path, quiet=False)
+
+# Download the files if not already present
+if not os.path.exists('movies_dict.pkl'):
+    download_file_from_gdrive('https://drive.google.com/file/d/1CUX_tGSQAiesw6lq1vEOzSMSHJMFo0xl/view?usp=drive_link', 'movies_dict.pkl')
+
+if not os.path.exists('similarity.pkl'):
+    download_file_from_gdrive('https://drive.google.com/file/d/1cau-WUZR1F1TszqManqqkpigga43nC_g/view?usp=drive_link', 'similarity.pkl')
+
+# Function to fetch movie poster
 def fetch_poster(movie_id, retries=2, delay=3):
     api_key = '8d45dcb1eefec0761446c65d574e58a6'  # Replace with your actual API key
     url = f'https://api.themoviedb.org/3/movie/{movie_id}?api_key={api_key}&language=en-US'
 
     for attempt in range(retries):
         try:
-            response = requests.get(url, timeout=5)  # Added timeout to prevent infinite waits
+            response = requests.get(url, timeout=5)
             response.raise_for_status()
             data = response.json()
             poster_path = data.get('poster_path')
             return f'https://image.tmdb.org/t/p/w500/{poster_path}' if poster_path else "Poster not available."
         except requests.exceptions.RequestException as e:
             if attempt < retries - 1:
-                time.sleep(delay)  # Wait and retry
+                time.sleep(delay)
                 continue
             return "Error fetching poster"
 
-
+# Function to recommend movies
 def recommend(movie):
-    try:
-        if movie not in movies['title'].values:
-            return ["Movie not found"], [""]
+    if movie not in movies['title'].values:
+        return ["Movie not found"], [""]
 
-        movie_index = movies[movies['title'] == movie].index[0]
-        distances = similarity[movie_index]
-        movie_list = sorted(list(enumerate(distances)), reverse=True, key=lambda x: x[1])[1:6]
+    movie_index = movies[movies['title'] == movie].index[0]
 
-        recommend_movies = [movies.iloc[i[0]].title for i in movie_list]
-        recommend_movies_posters = [fetch_poster(movies.iloc[i[0]].movie_id) for i in movie_list]
+    if movie_index >= len(similarity):
+        return ["Similarity index out of range"], [""]
 
-        return recommend_movies, recommend_movies_posters
-    except Exception as e:
-        return ["Error occurred"], [""]
+    distances = similarity[movie_index]
+    movie_list = sorted(list(enumerate(distances)), reverse=True, key=lambda x: x[1])[1:6]
 
+    recommend_movies = []
+    recommend_movies_posters = []
+
+    for i in movie_list:
+        if i[0] < len(movies):
+            movie_id = movies.iloc[i[0]].movie_id
+            recommend_movies.append(movies.iloc[i[0]].title)
+            recommend_movies_posters.append(fetch_poster(movie_id))
+        else:
+            recommend_movies.append("Movie ID not found")
+            recommend_movies_posters.append("")
+
+    return recommend_movies, recommend_movies_posters
 
 # Load movie data
-def load_data(file_path):
-    try:
-        return joblib.load(file_path)
-    except (EOFError, FileNotFoundError) as e:
-        st.error(f"Error loading {file_path}: {e}")
-        return None
-
-movies_dict = load_data('movies_dict_compressed.pkl.z')
-if movies_dict is not None:
-    movies = pd.DataFrame(movies_dict)
-else:
-    st.stop()
-
-similarity = load_data('similarity_compressed.pkl.z')
-if similarity is None:
-    st.stop()
+movies_dict = pd.read_pickle('movies_dict.pkl')
+movies = pd.DataFrame(movies_dict)
+similarity = pd.read_pickle('similarity.pkl')
 
 # Load background image
 def get_base64_image(image_path):
