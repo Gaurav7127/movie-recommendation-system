@@ -87,7 +87,7 @@ if bg_image:
             font-weight: bold;
             text-align: center;
             margin-bottom: 0;
-        }}
+        }
         .subtitle {
             font-size: 20px;
             text-align: center;
