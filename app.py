@@ -93,7 +93,7 @@ if bg_image:
         text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);  /* Added shadow for readability */
     }}
     .subtitle {{
-        font-size: 22px; 
+        font-size: 20px; 
         color: #FFD700;  
         text-align: center;
         font-family: 'Arial', sans-serif;  
