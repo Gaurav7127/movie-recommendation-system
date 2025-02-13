@@ -1,31 +1,15 @@
 import streamlit as st
 import pandas as pd
 import requests
-import time
+import pickle
 import base64
 import os
-import gdown
 
-# Google Drive links to movie data
-movies_url = 'https://drive.google.com/uc?id=1CUX_tGSQAiesw6lq1vEOzSMSHJMFo0xl'
-similarity_url = 'https://drive.google.com/uc?id=1cau-WUZR1F1TszqManqqkpigga43nC_g'
-
-movies_file = 'movies_dict.pkl'
-similarity_file = 'similarity.pkl'
-
-# Download if files are missing
-if not os.path.exists(movies_file):
-    gdown.download(movies_url, movies_file, quiet=False)
-
-if not os.path.exists(similarity_file):
-    gdown.download(similarity_url, similarity_file, quiet=False)
-
-# Load movie data
-movies_dict = pd.read_pickle(movies_file)
+# Load the data
+movies_dict = pickle.load(open('movies_dict.pkl', 'rb'))
 movies = pd.DataFrame(movies_dict)
-similarity = pd.read_pickle(similarity_file)
+similarity = pickle.load(open('similarity.pkl', 'rb'))
 
-# API Key for TMDB
 API_KEY = "8d45dcb1eefec0761446c65d574e58a6"
 IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500"
 
@@ -34,7 +18,7 @@ def fetch_movie_details(movie_id):
     try:
         movie_url = f'https://api.themoviedb.org/3/movie/{movie_id}?api_key={API_KEY}&language=en-US'
         credits_url = f'https://api.themoviedb.org/3/movie/{movie_id}/credits?api_key={API_KEY}&language=en-US'
-
+        
         movie_response = requests.get(movie_url).json()
         credits_response = requests.get(credits_url).json()
 
@@ -51,36 +35,31 @@ def fetch_movie_details(movie_id):
         return {"error": str(e)}
 
 def recommend(movie):
-    """ Get recommended movies and their details. """
+    """ Get recommended movies. """
     try:
-        if movie not in movies['title'].values:
-            return []
-
         movie_index = movies[movies['title'] == movie].index[0]
         distances = similarity[movie_index]
-        recommended_movies = sorted(list(enumerate(distances)), key=lambda x: x[1], reverse=True)[1:6]
+        recommended_movie_indices = sorted(list(enumerate(distances)), key=lambda x: x[1], reverse=True)[1:6]
 
-        movie_details = []
-        for i in recommended_movies:
+        recommendations = []
+        for i in recommended_movie_indices:
             movie_id = movies.iloc[i[0]].movie_id
             details = fetch_movie_details(movie_id)
-            movie_details.append(details)
+            recommendations.append(details)
 
-        return movie_details
+        return recommendations
     except Exception as e:
         return [{"title": "Error fetching recommendations", "poster": "", "rating": "", "release_date": "", "plot": "", "director": "", "cast": []}]
 
-# Function to convert an image to base64
+# Load and set background image
 def get_base64_image(image_path):
     if os.path.exists(image_path):
         with open(image_path, "rb") as img_file:
             return base64.b64encode(img_file.read()).decode()
     return None
 
-# Background image
 bg_image = get_base64_image('234234-1140x641.jpg')
 
-# Apply custom styles if background image exists
 if bg_image:
     st.markdown(
         f"""
@@ -91,114 +70,26 @@ if bg_image:
             background-position: center;
             background-repeat: no-repeat;
         }}
-        .title {{
-            font-size: 55px; 
-            color: #FFFFFF;  
-            text-align: center;
-            font-family: 'Arial', sans-serif;  
-            padding: 10px 0;
-            margin: 0;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-        }}
-        .subtitle {{
-            font-size: 20px; 
-            color: #FFD700;  
-            text-align: center;
-            font-family: 'Arial', sans-serif;  
-            margin-top: -10px;  
-            padding-bottom: 20px;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);  
-        }}
-        .selectbox-container {{
-            text-align: center;
-            margin: 5px 0; 
-        }}
-        .movie-container {{
-            text-align: center;
-            padding: 10px; 
-        }}
-        .movie-title {{
-            font-size: 20px; 
-            color: #FFFFFF;  
-            margin-bottom: 10px; 
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
-        }}
-        .movie-poster {{
-            height: 250px;  
-            width: 170px;   
-            border-radius: 10px;  
-            border: 2px solid #FFFFFF;  
-        }}
-        .more-info {{
-            background-color: #FFD700;
-            color: black;
-            border: none;
-            border-radius: 5px;
-            padding: 8px 15px;
-            font-size: 16px;
-            cursor: pointer;
-        }}
-        @media (max-width: 1024px) {{
-        .title {{
-            font-size: 55px;
-        }}
-        .subtitle {{
-            font-size: 18px;
-        }}
-        .movie-poster {{
-            height: 220px;
-            width: 150px;
-        }}
-    }}
-
-
-    @media (max-width: 768px) {{
-        .title {{
-            font-size: 45px;
-        }}
-        .subtitle {{
-            font-size: 16px;
-        }}
-        .movie-poster {{
-            height: 180px;
-            width: 120px;
-        }}
-        .selectbox-label {{
-            font-size: 14px;
-        }}
-    }}
         </style>
         """,
         unsafe_allow_html=True
     )
 
-# App Title
-st.markdown('<h1 class="title">MovieMatch</h1>', unsafe_allow_html=True)
-st.markdown('<div class="subtitle">The Right Film, Every Time</div>', unsafe_allow_html=True)
+st.markdown('<h1 style="text-align:center; color:white; text-shadow: 2px 2px 4px black;">🎬 MovieMatch - Find Your Next Watch!</h1>', unsafe_allow_html=True)
+selected_movie = st.selectbox("Choose a movie:", movies["title"].values)
 
-# Select movie dropdown
-selected_movie = st.selectbox("🎬 Find your next watch 🍿", movies['title'].values)
-
-# Show recommendations when button is clicked
-if st.button('Let’s Go 🚀'):
+if st.button("🎥 Show Recommendations"):
     recommendations = recommend(selected_movie)
-    
-    num_cols = min(5, len(recommendations))
-    cols = st.columns(num_cols)
+    cols = st.columns(5)
     
     for idx, (col, movie) in enumerate(zip(cols, recommendations)):
         with col:
-            st.markdown(f"""
-                <div class="movie-container">
-                    <p class="movie-title">{movie['title']}</p>
-                    <img src="{movie['poster']}" class="movie-poster"/>
-                </div>
-            """, unsafe_allow_html=True)
-
-for idx, movie in enumerate(recommendations):
-        with st.expander(f"📽️ {movie['title']} (More Info)"):       
-            st.write(f"⭐ **Rating:** {movie['rating']}/10")
-            st.write(f"📅 **Release Date:** {movie['release_date']}")
-            st.write(f"📖 **Plot:** {movie['plot']}")
-            st.write(f"🎬 **Director:** {movie['director']}")
-            st.write(f"🎭 **Cast:** {', '.join(movie['cast'])}")
+            st.image(movie['poster'], width=150)
+            if st.button(f"More Info", key=f"info_{idx}"):
+                st.markdown(f"## {movie['title']}")
+                st.image(movie['poster'], width=300)
+                st.write(f"⭐ **Rating:** {movie['rating']}/10")
+                st.write(f"📅 **Release Date:** {movie['release_date']}")
+                st.write(f"📖 **Plot:** {movie['plot']}")
+                st.write(f"🎬 **Director:** {movie['director']}")
+                st.write(f"🎭 **Cast:** {', '.join(movie['cast'])}")
