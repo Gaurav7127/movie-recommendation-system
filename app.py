@@ -89,6 +89,7 @@ if bg_image:
         .selectbox-label {{
             font-size: 20px;
             font-weight: bold;
+            text-align: left;
             color: #00FF7F; /* Spring Green for unique contrast */
             text-align: center;
             margin-bottom: 10px;
