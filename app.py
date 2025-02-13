@@ -63,12 +63,12 @@ if bg_image:
     st.markdown(
     """
     <style>
-    /* Background Styling */
-    .stApp {
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-    }
+    .stApp {{
+            background-image: url("data:image/jpeg;base64,{bg_image}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }}
 
     /* Title Styling */
     .title {
