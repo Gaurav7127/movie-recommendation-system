@@ -2,6 +2,8 @@ import streamlit as st
 import pandas as pd
 import requests
 import pickle
+import base64
+import os
 
 # Load the data
 movies_dict = pickle.load(open('movies_dict.pkl', 'rb'))
@@ -49,10 +51,50 @@ def recommend(movie):
     except Exception as e:
         return [{"title": "Error fetching recommendations", "poster": "", "rating": "", "release_date": "", "plot": "", "director": "", "cast": []}]
 
-# Streamlit App
-st.title("🎬 MovieMatch - Find Your Next Watch!")
+def get_base64_image(image_path):
+    if os.path.exists(image_path):
+        with open(image_path, "rb") as img_file:
+            return base64.b64encode(img_file.read()).decode()
+    return None
 
-selected_movie = st.selectbox("Choose a movie:", movies["title"].values)
+bg_image = get_base64_image('234234-1140x641.jpg')
+
+if bg_image:
+    st.markdown(
+        f"""
+        <style>
+        .stApp {{
+            background-image: url("data:image/jpeg;base64,{bg_image}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }}
+        .title {{
+            font-size: 55px; 
+            color: #FFFFFF;  
+            text-align: center;
+            font-family: 'Arial', sans-serif;  
+            padding: 10px 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        }}
+        .subtitle {{
+            font-size: 20px; 
+            color: #FFD700;  
+            text-align: center;
+            font-family: 'Arial', sans-serif;  
+            margin-top: -10px;  
+            padding-bottom: 20px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);  
+        }}
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
+
+st.markdown('<h1 class="title">MovieMatch</h1>', unsafe_allow_html=True)
+st.markdown('<div class="subtitle">The Right Film, Every Time</div>', unsafe_allow_html=True)
+
+selected_movie = st.selectbox("🎬 Choose a movie:", movies["title"].values)
 
 if st.button("🎥 Show Recommendations"):
     recommendations = recommend(selected_movie)
