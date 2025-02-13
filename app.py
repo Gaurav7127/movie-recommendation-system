@@ -138,6 +138,35 @@ if bg_image:
             font-size: 16px;
             cursor: pointer;
         }}
+        @media (max-width: 1024px) {{
+        .title {{
+            font-size: 55px;
+        }}
+        .subtitle {{
+            font-size: 18px;
+        }}
+        .movie-poster {{
+            height: 220px;
+            width: 150px;
+        }}
+    }}
+
+
+    @media (max-width: 768px) {{
+        .title {{
+            font-size: 45px;
+        }}
+        .subtitle {{
+            font-size: 16px;
+        }}
+        .movie-poster {{
+            height: 180px;
+            width: 120px;
+        }}
+        .selectbox-label {{
+            font-size: 14px;
+        }}
+    }}
         </style>
         """,
         unsafe_allow_html=True
