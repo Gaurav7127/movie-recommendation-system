@@ -14,7 +14,6 @@ API_KEY = "8d45dcb1eefec0761446c65d574e58a6"
 IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500"
 
 def fetch_movie_details(movie_id):
-    """ Fetch movie details including poster, rating, release date, plot, and cast. """
     try:
         movie_url = f'https://api.themoviedb.org/3/movie/{movie_id}?api_key={API_KEY}&language=en-US'
         credits_url = f'https://api.themoviedb.org/3/movie/{movie_id}/credits?api_key={API_KEY}&language=en-US'
@@ -35,7 +34,6 @@ def fetch_movie_details(movie_id):
         return {"error": str(e)}
 
 def recommend(movie):
-    """ Get recommended movies. """
     try:
         movie_index = movies[movies['title'] == movie].index[0]
         distances = similarity[movie_index]
@@ -51,7 +49,6 @@ def recommend(movie):
     except Exception as e:
         return [{"title": "Error fetching recommendations", "poster": "", "rating": "", "release_date": "", "plot": "", "director": "", "cast": []}]
 
-# Load and set background image
 def get_base64_image(image_path):
     if os.path.exists(image_path):
         with open(image_path, "rb") as img_file:
@@ -70,26 +67,57 @@ if bg_image:
             background-position: center;
             background-repeat: no-repeat;
         }}
+        .title {{
+            font-size: 55px; 
+            color: #FFFFFF;  
+            text-align: center;
+            font-family: 'Arial', sans-serif;  
+            padding: 10px 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        }}
+        .movie-container {{
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+        }}
+        .movie-card {{
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            color: white;
+            width: 250px;
+        }}
+        .movie-poster {{
+            width: 100%;
+            border-radius: 10px;
+        }}
         </style>
         """,
         unsafe_allow_html=True
     )
 
-st.markdown('<h1 style="text-align:center; color:white; text-shadow: 2px 2px 4px black;">🎬 MovieMatch - Find Your Next Watch!</h1>', unsafe_allow_html=True)
-selected_movie = st.selectbox("Choose a movie:", movies["title"].values)
+st.markdown('<h1 class="title">MovieMatch</h1>', unsafe_allow_html=True)
+selected_movie = st.selectbox("🎬 Choose a movie:", movies["title"].values)
 
-if st.button("🎥 Show Recommendations"):
+if st.button("🍿 Show Recommendations"):
     recommendations = recommend(selected_movie)
-    cols = st.columns(5)
     
-    for idx, (col, movie) in enumerate(zip(cols, recommendations)):
-        with col:
-            st.image(movie['poster'], width=150)
-            if st.button(f"More Info", key=f"info_{idx}"):
-                st.markdown(f"## {movie['title']}")
-                st.image(movie['poster'], width=300)
-                st.write(f"⭐ **Rating:** {movie['rating']}/10")
-                st.write(f"📅 **Release Date:** {movie['release_date']}")
-                st.write(f"📖 **Plot:** {movie['plot']}")
-                st.write(f"🎬 **Director:** {movie['director']}")
-                st.write(f"🎭 **Cast:** {', '.join(movie['cast'])}")
+    st.markdown("<div class='movie-container'>", unsafe_allow_html=True)
+    for movie in recommendations:
+        st.markdown(
+            f"""
+            <div class='movie-card'>
+                <img src="{movie['poster']}" class='movie-poster'/>
+                <h3>{movie['title']}</h3>
+                <p>⭐ {movie['rating']} | 📅 {movie['release_date']}</p>
+                <p><b>Director:</b> {movie['director']}</p>
+                <p><b>Cast:</b> {', '.join(movie['cast'])}</p>
+                <p>{movie['plot']}</p>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+    st.markdown("</div>", unsafe_allow_html=True)
