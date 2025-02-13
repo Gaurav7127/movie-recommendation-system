@@ -195,11 +195,12 @@ if st.button('Let’s Go 🚀'):
                 </div>
             """, unsafe_allow_html=True)
 
-            # More Info Button
-            if st.button(f"ℹ️ More Info", key=f"info_{idx}"):
-                st.write(f"⭐ **Rating:** {movie['rating']}/10")
-                st.write(f"📅 **Release Date:** {movie['release_date']}")
-                st.write(f"📖 **Plot:** {movie['plot']}")
-                st.write(f"🎬 **Director:** {movie['director']}")
-                st.write(f"🎭 **Cast:** {', '.join(movie['cast'])}")
-
+           
+    for idx, movie in enumerate(recommendations):
+        with st.expander(f"📽️ {movie['title']} (More Info)"):
+            st.image(movie['poster'], width=300)
+            st.write(f"⭐ **Rating:** {movie['rating']}/10")
+            st.write(f"📅 **Release Date:** {movie['release_date']}")
+            st.write(f"📖 **Plot:** {movie['plot']}")
+            st.write(f"🎬 **Director:** {movie['director']}")
+            st.write(f"🎭 **Cast:** {', '.join(movie['cast'])}")
