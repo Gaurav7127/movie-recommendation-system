@@ -61,47 +61,60 @@ bg_image = get_base64_image('234234-1140x641.jpg')
 
 if bg_image:
     st.markdown(
-        f"""
-        <style>
-        .stApp {{
-            background-image: url("data:image/jpeg;base64,{bg_image}");
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-        }}
-        .title {{
-            font-size: 60px; 
-            color: #FFD700;  /* Gold color for better contrast */
-            text-align: center;
-            font-family: 'Arial Black', sans-serif;  
-            padding: 10px 0;
-            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
-        }}
-        .subtitle {{
-            font-size: 24px; 
-            color: #FFFFFF;  /* White color for clarity */
-            text-align: center;
-            font-family: 'Arial', sans-serif;  
-            margin-top: -10px;  
-            padding-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);  
-        }}
-        .selectbox-label {
-            font-size: 20px; 
-            font-weight: bold;
-            color: #FFD700; /* Gold color */
-            text-align: left; /* Align text to the left */
-            padding-left: 10px; /* Add slight padding for spacing */
-      }}
-        .movie-info {{
-            font-size: 18px;
-            color: #FFFFFF; /* White for readability */
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
-        }}
-        </style>
-        """,
-        unsafe_allow_html=True
-    )
+    """
+    <style>
+    /* Background Styling */
+    .stApp {
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+
+    /* Title Styling */
+    .title {
+        font-size: 60px; 
+        color: #FF4500;  /* Orange-Red color for contrast */
+        text-align: center;
+        font-family: 'Arial', sans-serif;
+        padding: 10px 0;
+        text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.7);
+    }
+
+    /* Subtitle Styling */
+    .subtitle {
+        font-size: 22px; 
+        color: #FFD700;  /* Gold color */
+        text-align: center;
+        font-family: 'Arial', sans-serif;
+        margin-top: -10px;
+        padding-bottom: 20px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    }
+
+    /* Find Your Next Watch Label */
+    .selectbox-label {
+        font-size: 20px; 
+        font-weight: bold;
+        color: #00FF7F; /* Spring Green color */
+        text-align: left; 
+        padding-left: 15px;
+        margin-bottom: 5px;
+    }
+
+    /* Expander Styling */
+    .streamlit-expanderHeader {
+        font-size: 18px !important;
+        font-weight: bold !important;
+        color: #1E90FF !important; /* DodgerBlue */
+        background-color: rgba(255, 255, 255, 0.1) !important;
+        padding: 10px !important;
+        border-radius: 10px !important;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 
 st.markdown('<h1 class="title">🎬 MovieMatch</h1>', unsafe_allow_html=True)
 st.markdown('<div class="subtitle">The Right Film, Every Time</div>', unsafe_allow_html=True)
