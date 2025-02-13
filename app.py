@@ -71,7 +71,7 @@ if bg_image:
         }}
         .title {{
             font-size: 60px; 
-            color: #FFD700;  /* Gold Color for Contrast */
+            color: #FFD700;  
             text-align: center;
             font-family: 'Arial Black', sans-serif;  
             padding: 20px 0;
@@ -92,12 +92,15 @@ if bg_image:
     )
 
 st.markdown('<h1 class="title">MovieMatch</h1>', unsafe_allow_html=True)
-st.markdown('<div class="subtitle">The Right Film, Every Time</div>', unsafe_allow_html=True)
+st.markdown('<h3 class="subtitle">The Right Film, Every Time</h3>', unsafe_allow_html=True)
 
-selected_movie = st.selectbox("🎬 Choose a movie:", movies["title"].values)
+st.markdown('<div class="selectbox-container"><div class="selectbox-label">🎬 Find your next watch 🍿</div></div>',
+            unsafe_allow_html=True)
 
-if st.button("🎥 Show Recommendations"):
-    recommendations = recommend(selected_movie)
+selected_movie_name = st.selectbox('', movies['title'].values, key='movie_selectbox')
+
+if st.button('Lets Goo 🚀'):
+    names, posters = recommend(selected_movie_name)
 
     for idx, movie in enumerate(recommendations):
         with st.expander(f"📽️ {movie['title']} (More Info)"):
