@@ -13,6 +13,7 @@ similarity = pickle.load(open('similarity.pkl', 'rb'))
 API_KEY = "8d45dcb1eefec0761446c65d574e58a6"
 IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500"
 
+# Function to fetch movie details
 def fetch_movie_details(movie_id):
     """ Fetch movie details including poster, rating, release date, plot, and cast. """
     try:
@@ -34,6 +35,7 @@ def fetch_movie_details(movie_id):
     except Exception as e:
         return {"error": str(e)}
 
+# Function to get recommendations
 def recommend(movie):
     """ Get recommended movies. """
     try:
@@ -51,98 +53,89 @@ def recommend(movie):
     except Exception as e:
         return [{"title": "Error fetching recommendations", "poster": "", "rating": "", "release_date": "", "plot": "", "director": "", "cast": []}]
 
+# Function to encode background image
 def get_base64_image(image_path):
     if os.path.exists(image_path):
         with open(image_path, "rb") as img_file:
             return base64.b64encode(img_file.read()).decode()
     return None
 
-bg_image = get_base64_image('234234-1140x641.jpg')
+# Load background image
+bg_image = get_base64_image('background.jpg')  # Change this to your image filename
 
+# Apply CSS for styling
 if bg_image:
     st.markdown(
-    """
-    <style>
-    .stApp {{
+        f"""
+        <style>
+        /* Background Styling */
+        .stApp {{
             background-image: url("data:image/jpeg;base64,{bg_image}");
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
         }}
 
-    /* Title Styling */
-    .title {
-        font-size: 60px; 
-        color: #FF4500;  /* Orange-Red color for contrast */
-        text-align: center;
-        font-family: 'Arial', sans-serif;
-        padding: 10px 0;
-        text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.7);
-    }
+        /* Title Styling */
+        .title {{
+            font-size: 60px; 
+            color: #FF4500;  /* Orange-Red */
+            text-align: center;
+            font-family: 'Arial', sans-serif;
+            padding: 10px 0;
+            text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.7);
+        }}
 
-    /* Subtitle Styling */
-    .subtitle {
-        font-size: 22px; 
-        color: #FFD700;  /* Gold color */
-        text-align: center;
-        font-family: 'Arial', sans-serif;
-        margin-top: -10px;
-        padding-bottom: 20px;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-    }
+        /* Subtitle Styling */
+        .subtitle {{
+            font-size: 22px; 
+            color: #FFD700;  /* Gold */
+            text-align: center;
+            font-family: 'Arial', sans-serif;
+            margin-top: -10px;
+            padding-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        }}
 
-    /* Find Your Next Watch Label */
-    .selectbox-label {
-        font-size: 20px; 
-        font-weight: bold;
-        color: #00FF7F; /* Spring Green color */
-        text-align: left; 
-        padding-left: 15px;
-        margin-bottom: 5px;
-    }
+        /* Find Your Next Watch Label */
+        .selectbox-label {{
+            font-size: 20px; 
+            font-weight: bold;
+            color: #00FF7F; /* Spring Green */
+            text-align: left; 
+            padding-left: 15px;
+            margin-bottom: 5px;
+        }}
 
-    /* Expander Styling */
-    .streamlit-expanderHeader {
-        font-size: 18px !important;
-        font-weight: bold !important;
-        color: #1E90FF !important; /* DodgerBlue */
-        background-color: rgba(255, 255, 255, 0.1) !important;
-        padding: 10px !important;
-        border-radius: 10px !important;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
+        /* Expander Styling */
+        .streamlit-expanderHeader {{
+            font-size: 18px !important;
+            font-weight: bold !important;
+            color: #1E90FF !important; /* DodgerBlue */
+            background-color: rgba(255, 255, 255, 0.1) !important;
+            padding: 10px !important;
+            border-radius: 10px !important;
+        }}
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
 
-
-st.markdown('<h1 class="title">🎬 MovieMatch</h1>', unsafe_allow_html=True)
+# UI Elements
+st.markdown('<h1 class="title">MovieMatch</h1>', unsafe_allow_html=True)
 st.markdown('<div class="subtitle">The Right Film, Every Time</div>', unsafe_allow_html=True)
 st.markdown('<div class="selectbox-label">🎬 Find Your Next Watch 🍿</div>', unsafe_allow_html=True)
 
-selected_movie = st.selectbox("", movies["title"].values, key='movie_selectbox')
+selected_movie = st.selectbox("", movies["title"].values)
 
-if st.button("🚀 Let's Goo"):
+if st.button("🎥 Show Recommendations"):
     recommendations = recommend(selected_movie)
 
     for idx, movie in enumerate(recommendations):
-        expander_html = f"""
-        <style>
-        .expander-header {{
-            font-size: 20px;
-            font-weight: bold;
-            color: #FFD700; /* Gold color for better contrast */
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
-        }}
-        </style>
-        """
-        st.markdown(expander_html, unsafe_allow_html=True)
-        
         with st.expander(f"📽️ {movie['title']} (More Info)"):
             st.image(movie['poster'], width=300)
-            st.markdown(f"<div class='movie-info'>⭐ <b>Rating:</b> {movie['rating']}/10</div>", unsafe_allow_html=True)
-            st.markdown(f"<div class='movie-info'>📅 <b>Release Date:</b> {movie['release_date']}</div>", unsafe_allow_html=True)
-            st.markdown(f"<div class='movie-info'>📖 <b>Plot:</b> {movie['plot']}</div>", unsafe_allow_html=True)
-            st.markdown(f"<div class='movie-info'>🎬 <b>Director:</b> {movie['director']}</div>", unsafe_allow_html=True)
-            st.markdown(f"<div class='movie-info'>🎭 <b>Cast:</b> {', '.join(movie['cast'])}</div>", unsafe_allow_html=True)
-
+            st.write(f"⭐ **Rating:** {movie['rating']}/10")
+            st.write(f"📅 **Release Date:** {movie['release_date']}")
+            st.write(f"📖 **Plot:** {movie['plot']}")
+            st.write(f"🎬 **Director:** {movie['director']}")
+            st.write(f"🎭 **Cast:** {', '.join(movie['cast'])}")
