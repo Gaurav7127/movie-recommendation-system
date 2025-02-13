@@ -3,13 +3,40 @@ import pandas as pd
 import requests
 import pickle
 
-# Load the data
+# Load data
 movies_dict = pickle.load(open('movies_dict.pkl', 'rb'))
 movies = pd.DataFrame(movies_dict)
 similarity = pickle.load(open('similarity.pkl', 'rb'))
 
 API_KEY = "8d45dcb1eefec0761446c65d574e58a6"
 IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500"
+
+# Apply background image using CSS
+BACKGROUND_IMAGE_URL = "https://wallpapercave.com/wp/wp4065228.jpg"
+st.markdown(
+    f"""
+    <style>
+        .stApp {{
+            background: url("{BACKGROUND_IMAGE_URL}");
+            background-size: cover;
+            background-position: center;
+        }}
+        .movie-container {{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }}
+        .movie-title {{
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            text-align: center;
+        }}
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
 def fetch_movie_details(movie_id):
     """ Fetch movie details including poster, rating, release date, plot, and cast. """
@@ -58,10 +85,15 @@ if st.button("🎥 Show Recommendations"):
     recommendations = recommend(selected_movie)
 
     for idx, movie in enumerate(recommendations):
-        with st.expander(f"📽️ {movie['title']} (More Info)"):
-            st.image(movie['poster'], width=300)
+        st.markdown(f"<div class='movie-container'>", unsafe_allow_html=True)
+        st.image(movie['poster'], width=250)
+        more_info_button = st.button(f"ℹ️ More Info - {movie['title']}", key=f"info_{idx}")
+
+        if more_info_button:
             st.write(f"⭐ **Rating:** {movie['rating']}/10")
             st.write(f"📅 **Release Date:** {movie['release_date']}")
             st.write(f"📖 **Plot:** {movie['plot']}")
             st.write(f"🎬 **Director:** {movie['director']}")
             st.write(f"🎭 **Cast:** {', '.join(movie['cast'])}")
+
+        st.markdown("</div>", unsafe_allow_html=True)
