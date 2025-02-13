@@ -86,15 +86,13 @@ if bg_image:
             padding-bottom: 20px;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);  
         }}
-        .selectbox-label {{
-            font-size: 20px;
+        .selectbox-label {
+            font-size: 20px; 
             font-weight: bold;
-            text-align: left;
-            color: #00FF7F; /* Spring Green for unique contrast */
-            text-align: center;
-            margin-bottom: 10px;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
-        }}
+            color: #FFD700; /* Gold color */
+            text-align: left; /* Align text to the left */
+            padding-left: 10px; /* Add slight padding for spacing */
+      }}
         .movie-info {{
             font-size: 18px;
             color: #FFFFFF; /* White for readability */
@@ -111,10 +109,22 @@ st.markdown('<div class="selectbox-label">🎬 Find Your Next Watch 🍿</div>',
 
 selected_movie = st.selectbox("", movies["title"].values, key='movie_selectbox')
 
-if st.button("🚀 Show Recommendations"):
+if st.button("🚀 Let's Goo"):
     recommendations = recommend(selected_movie)
 
     for idx, movie in enumerate(recommendations):
+        expander_html = f"""
+        <style>
+        .expander-header {{
+            font-size: 20px;
+            font-weight: bold;
+            color: #FFD700; /* Gold color for better contrast */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+        }}
+        </style>
+        """
+        st.markdown(expander_html, unsafe_allow_html=True)
+        
         with st.expander(f"📽️ {movie['title']} (More Info)"):
             st.image(movie['poster'], width=300)
             st.markdown(f"<div class='movie-info'>⭐ <b>Rating:</b> {movie['rating']}/10</div>", unsafe_allow_html=True)
@@ -122,3 +132,4 @@ if st.button("🚀 Show Recommendations"):
             st.markdown(f"<div class='movie-info'>📖 <b>Plot:</b> {movie['plot']}</div>", unsafe_allow_html=True)
             st.markdown(f"<div class='movie-info'>🎬 <b>Director:</b> {movie['director']}</div>", unsafe_allow_html=True)
             st.markdown(f"<div class='movie-info'>🎭 <b>Cast:</b> {', '.join(movie['cast'])}</div>", unsafe_allow_html=True)
+
