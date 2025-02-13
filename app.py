@@ -197,7 +197,7 @@ if st.button('Let’s Go 🚀'):
 
 for idx, movie in enumerate(recommendations):
         with st.expander(f"📽️ {movie['title']} (More Info)"):       
-          st.write(f"⭐ **Rating:** {movie['rating']}/10")
+            st.write(f"⭐ **Rating:** {movie['rating']}/10")
             st.write(f"📅 **Release Date:** {movie['release_date']}")
             st.write(f"📖 **Plot:** {movie['plot']}")
             st.write(f"🎬 **Director:** {movie['director']}")
