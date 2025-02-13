@@ -61,51 +61,43 @@ bg_image = get_base64_image('234234-1140x641.jpg')
 
 if bg_image:
     st.markdown(
-    """
-    <style>
-        .title {
-            font-size: 50px; 
-            font-weight: bold;
-            color: #FFD700; /* Gold color */
-            text-shadow: 3px 3px 8px rgba(0, 0, 0, 0.8);
+        f"""
+        <style>
+        .stApp {{
+            background-image: url("data:image/jpeg;base64,{bg_image}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }}
+        .title {{
+            font-size: 60px; 
+            color: #FFD700;  /* Gold Color for Contrast */
             text-align: center;
-        }
-        .subtitle {
-            font-size: 20px;
-            color: #FFA500; /* Orange color */
+            font-family: 'Arial Black', sans-serif;  
+            padding: 20px 0;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.9);
+        }}
+        .subtitle {{
+            font-size: 22px; 
+            color: #FFFFFF;  
             text-align: center;
-            margin-bottom: 20px;
-        }
-        .selectbox-container {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
-        .selectbox-label {
-            font-size: 18px;
-            font-weight: bold;
-            color: white;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 10px 15px;
-            border-radius: 10px;
-            display: inline-block;
-        }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
+            font-family: 'Arial', sans-serif;  
+            margin-top: -15px;  
+            padding-bottom: 25px;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);  
+        }}
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
 
 st.markdown('<h1 class="title">MovieMatch</h1>', unsafe_allow_html=True)
-st.markdown('<h3 class="subtitle">The Right Film, Every Time</h3>', unsafe_allow_html=True)
+st.markdown('<div class="subtitle">The Right Film, Every Time</div>', unsafe_allow_html=True)
 
-st.markdown('<div class="selectbox-container"><div class="selectbox-label">🎬 Find your next watch 🍿</div></div>',
-            unsafe_allow_html=True)
+selected_movie = st.selectbox("🎬 Choose a movie:", movies["title"].values)
 
-selected_movie_name = st.selectbox('', movies['title'].values, key='movie_selectbox')
-
-if st.button('Lets Goo 🚀'):
-    names, posters = recommend(selected_movie_name)
-
+if st.button("🎥 Show Recommendations"):
+    recommendations = recommend(selected_movie)
 
     for idx, movie in enumerate(recommendations):
         with st.expander(f"📽️ {movie['title']} (More Info)"):
