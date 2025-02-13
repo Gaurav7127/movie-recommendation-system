@@ -13,7 +13,6 @@ similarity = pickle.load(open('similarity.pkl', 'rb'))
 API_KEY = "8d45dcb1eefec0761446c65d574e58a6"
 IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500"
 
-# Function to fetch movie details
 def fetch_movie_details(movie_id):
     """ Fetch movie details including poster, rating, release date, plot, and cast. """
     try:
@@ -35,7 +34,6 @@ def fetch_movie_details(movie_id):
     except Exception as e:
         return {"error": str(e)}
 
-# Function to get recommendations
 def recommend(movie):
     """ Get recommended movies. """
     try:
@@ -53,61 +51,55 @@ def recommend(movie):
     except Exception as e:
         return [{"title": "Error fetching recommendations", "poster": "", "rating": "", "release_date": "", "plot": "", "director": "", "cast": []}]
 
-# Function to encode background image
 def get_base64_image(image_path):
     if os.path.exists(image_path):
         with open(image_path, "rb") as img_file:
             return base64.b64encode(img_file.read()).decode()
     return None
 
-# Load background image
-bg_image = get_base64_image('background.jpg')  # Change this to your image filename
+bg_image = get_base64_image('234234-1140x641.jpg')
 
-# Apply CSS for styling
 if bg_image:
     st.markdown(
         f"""
         <style>
-        /* Background Styling */
         .stApp {{
             background-image: url("data:image/jpeg;base64,{bg_image}");
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
         }}
-
-        /* Title Styling */
         .title {{
             font-size: 60px; 
-            color: #FF4500;  /* Orange-Red */
+            color: #FFD700;  /* Gold color for better contrast */
             text-align: center;
-            font-family: 'Arial', sans-serif;
+            font-family: 'Arial Black', sans-serif;  
             padding: 10px 0;
-            text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.7);
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
         }}
-
-        /* Subtitle Styling */
         .subtitle {{
-            font-size: 22px; 
-            color: #FFD700;  /* Gold */
+            font-size: 24px; 
+            color: #FFFFFF;  /* White color for clarity */
             text-align: center;
-            font-family: 'Arial', sans-serif;
-            margin-top: -10px;
+            font-family: 'Arial', sans-serif;  
+            margin-top: -10px;  
             padding-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);  
         }}
-
-        /* Find Your Next Watch Label */
         .selectbox-label {{
-            font-size: 20px; 
+            font-size: 20px;
             font-weight: bold;
-            color: #00FF7F; /* Spring Green */
-            text-align: left; 
-            padding-left: 15px;
-            margin-bottom: 5px;
+            text-align: left;
+            color: #00FF7F; /* Spring Green for unique contrast */
+            text-align: center;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
         }}
-
-        /* Expander Styling */
+        .movie-info {{
+            font-size: 18px;
+            color: #FFFFFF; /* White for readability */
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
+        }}
         .streamlit-expanderHeader {{
             font-size: 18px !important;
             font-weight: bold !important;
@@ -121,21 +113,20 @@ if bg_image:
         unsafe_allow_html=True
     )
 
-# UI Elements
-st.markdown('<h1 class="title">MovieMatch</h1>', unsafe_allow_html=True)
+st.markdown('<h1 class="title">🎬 MovieMatch</h1>', unsafe_allow_html=True)
 st.markdown('<div class="subtitle">The Right Film, Every Time</div>', unsafe_allow_html=True)
 st.markdown('<div class="selectbox-label">🎬 Find Your Next Watch 🍿</div>', unsafe_allow_html=True)
 
-selected_movie = st.selectbox("", movies["title"].values)
+selected_movie = st.selectbox("", movies["title"].values, key='movie_selectbox')
 
-if st.button("🎥 Show Recommendations"):
+if st.button("🚀 Show Recommendations"):
     recommendations = recommend(selected_movie)
 
     for idx, movie in enumerate(recommendations):
         with st.expander(f"📽️ {movie['title']} (More Info)"):
             st.image(movie['poster'], width=300)
-            st.write(f"⭐ **Rating:** {movie['rating']}/10")
-            st.write(f"📅 **Release Date:** {movie['release_date']}")
-            st.write(f"📖 **Plot:** {movie['plot']}")
-            st.write(f"🎬 **Director:** {movie['director']}")
-            st.write(f"🎭 **Cast:** {', '.join(movie['cast'])}")
+            st.markdown(f"<div class='movie-info'>⭐ <b>Rating:</b> {movie['rating']}/10</div>", unsafe_allow_html=True)
+            st.markdown(f"<div class='movie-info'>📅 <b>Release Date:</b> {movie['release_date']}</div>", unsafe_allow_html=True)
+            st.markdown(f"<div class='movie-info'>📖 <b>Plot:</b> {movie['plot']}</div>", unsafe_allow_html=True)
+            st.markdown(f"<div class='movie-info'>🎬 <b>Director:</b> {movie['director']}</div>", unsafe_allow_html=True)
+            st.markdown(f"<div class='movie-info'>🎭 <b>Cast:</b> {', '.join(movie['cast'])}</div>", unsafe_allow_html=True)
