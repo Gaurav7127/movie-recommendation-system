@@ -140,6 +140,25 @@ if bg_image:
         """,
         unsafe_allow_html=True
     )
+st.markdown("""
+    <style>
+    /* Change the color of the expander title */
+    .streamlit-expanderHeader {
+        color: #FFD700 !important;  /* Gold color */
+        font-size: 18px !important;
+        font-weight: bold !important;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+# Expander for movie details
+with st.expander(f"<span style='color: #FFD700;'>📽️ {movie['title']} (More Info)</span>", unsafe_allow_html=True):
+    st.image(movie['poster'], width=300)
+    st.markdown(f"<div class='movie-info'>⭐ <b>Rating:</b> {movie['rating']}/10</div>", unsafe_allow_html=True)
+    st.markdown(f"<div class='movie-info'>📅 <b>Release Date:</b> {movie['release_date']}</div>", unsafe_allow_html=True)
+    st.markdown(f"<div class='movie-info'>📖 <b>Plot:</b> {movie['plot']}</div>", unsafe_allow_html=True)
+    st.markdown(f"<div class='movie-info'>🎬 <b>Director:</b> {movie['director']}</div>", unsafe_allow_html=True)
+    st.markdown(f"<div class='movie-info'>🎭 <b>Cast:</b> {', '.join(movie['cast'])}</div>", unsafe_allow_html=True)
 
 st.markdown('<h1 class="title">🎬 MovieMatch</h1>', unsafe_allow_html=True)
 st.markdown('<div class="subtitle">The Right Film, Every Time</div>', unsafe_allow_html=True)
