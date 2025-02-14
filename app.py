@@ -51,6 +51,7 @@ def recommend(movie):
     except Exception as e:
         return [{"title": "Error fetching recommendations", "poster": "", "rating": "", "release_date": "", "plot": "", "director": "", "cast": []}]
 
+# Apply background image (optional)
 def get_base64_image(image_path):
     if os.path.exists(image_path):
         with open(image_path, "rb") as img_file:
@@ -71,7 +72,7 @@ if bg_image:
         }}
         .title {{
             font-size: 60px; 
-            color: #FF6347;  /* Tomato color */
+            color: #FF6347;  /* Tomato */
             text-align: center;
             font-family: 'Arial Black', sans-serif;  
             padding: 10px 0;
@@ -100,7 +101,8 @@ if bg_image:
             color: #FFFFFF;
             text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
         }}
-        .streamlit-expanderHeader {{
+        /* Change the color of Expander Title */
+        div[data-testid="stExpander"] div[role="button"] {{
             font-size: 20px !important;
             font-weight: bold !important;
             color: #FFA500 !important; /* Orange */
@@ -144,7 +146,9 @@ button_html = """
             background-color: #FF6347; /* Tomato */
         }
     </style>
-   
+    <div class="custom-button">
+        <button onclick="window.location.reload()">🔥 Let's Go!</button>
+    </div>
 """
 st.markdown(button_html, unsafe_allow_html=True)
 
