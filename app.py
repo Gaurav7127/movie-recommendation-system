@@ -110,7 +110,7 @@ if bg_image:
 st.markdown(
     """
     <style>
-    div[data-testid="stExpander"] div[role="button"] {
+    {
         background-color: #0e1117 !important;
         color: white !important;
         font-size: 20px !important;
