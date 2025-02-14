@@ -167,9 +167,6 @@ button:hover {{
         height: 220px;
         width: 150px;
 }}
-    
-}
-
 /* Responsiveness for Mobile */
 @media (max-width: 768px) {{
     .title {
@@ -184,7 +181,7 @@ button:hover {{
     }
     .selectbox-label {
         font-size: 14px;
-    }]
+    }}
 }
 </style>
  """,
