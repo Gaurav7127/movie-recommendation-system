@@ -90,24 +90,24 @@ if bg_image:
             font-size: 20px;
             font-weight: bold;
             text-align: left;
-            color: #FFD700; /* Gold for better visibility */
+            color: #00FF7F; /* Spring Green for unique contrast */
             margin-bottom: 10px;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
         }}
-        div.streamlit-expander div[role="button"] {{
-            color: #FFD700 !important; /* Gold for visibility */
+        .movie-info {{
+            font-size: 18px;
+            color: #FFFFFF; /* White for readability */
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
+        }}
+        .streamlit-expanderHeader {{
+            background-color: #0e1117 !important;
+            color: white !important;
             font-size: 18px !important;
             font-weight: bold !important;
-        }}
-        div.streamlit-expander {{
-            background-color: rgba(0, 0, 0, 0.7) !important; /* Semi-transparent black */
+            padding: 10px !important;
             border-radius: 10px !important;
-            padding: 5px !important;
         }}
-        div.stButton > button {{
-            display: none !important; /* Hide the Let's Go button */
-        }}
-         /* Responsiveness for tablets */
+        /* Responsiveness for tablets */
     @media (max-width: 1024px) {{
         .title {{
             font-size: 40px;
@@ -148,11 +148,11 @@ st.markdown('<div class="selectbox-label">🎬 Find Your Next Watch 🍿</div>',
 
 selected_movie = st.selectbox("", movies["title"].values, key='movie_selectbox')
 
-if st.button("🚀 Show Recommendations"):
+if st.button("🚀 Let's Go"):
     recommendations = recommend(selected_movie)
 
     for idx, movie in enumerate(recommendations):
-        with st.expander(f"📽️ {movie['title']} (More Info)"):
+        with st.expander(f"📽️ <span style='color: #FFD700;'>{movie['title']} (More Info)</span>", expanded=False):
             st.image(movie['poster'], width=300)
             st.markdown(f"<div class='movie-info'>⭐ <b>Rating:</b> {movie['rating']}/10</div>", unsafe_allow_html=True)
             st.markdown(f"<div class='movie-info'>📅 <b>Release Date:</b> {movie['release_date']}</div>", unsafe_allow_html=True)
