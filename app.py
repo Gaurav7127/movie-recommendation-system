@@ -99,7 +99,9 @@ if bg_image:
             color: #FFFFFF; /* White for readability */
             text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
         }}
-        /* Custom styling for expander titles */
+       st.markdown("""
+    <style>
+    /* Custom styling for expander titles */
     .streamlit-expanderHeader {
         color: #FFD700 !important;  /* Gold color */
         font-size: 18px !important;
@@ -138,6 +140,7 @@ if bg_image:
     }
     </style>
 """, unsafe_allow_html=True)
+
 
 for idx, movie in enumerate(recommendations):
     expander_text = f"<span style='color: #FFD700;'>📽️ {movie['title']} (More Info)</span>"
