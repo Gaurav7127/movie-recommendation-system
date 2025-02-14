@@ -144,9 +144,7 @@ button_html = """
             background-color: #FF6347; /* Tomato */
         }
     </style>
-    <div class="custom-button">
-        <button onclick="window.location.reload()">🔥 Let's Go!</button>
-    </div>
+   
 """
 st.markdown(button_html, unsafe_allow_html=True)
 
