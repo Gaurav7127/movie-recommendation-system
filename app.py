@@ -106,20 +106,38 @@ if bg_image:
         unsafe_allow_html=True
     )
 
+# 🔥 Dedicated CSS for Expander Styling
+st.markdown(
+    """
+    <style>
+    div[data-testid="stExpander"] div[role="button"] {
+        background-color: #0e1117 !important;
+        color: white !important;
+        font-size: 20px !important;
+        font-weight: bold !important;
+        padding: 12px !important;
+        border-radius: 8px !important;
+        text-align: left !important;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 st.markdown('<h1 class="title">🎬 MovieMatch</h1>', unsafe_allow_html=True)
 st.markdown('<div class="subtitle">The Right Film, Every Time</div>', unsafe_allow_html=True)
 st.markdown('<div class="selectbox-label">🎬 Find Your Next Watch 🍿</div>', unsafe_allow_html=True)
 
 selected_movie = st.selectbox("", movies["title"].values, key='movie_selectbox')
 
-if st.button("🔥 Get Recommendations"):
+if st.button("🔥 Let's Goo🚀"):
     recommendations = recommend(selected_movie)
 
-   for idx, movie in enumerate(recommendations):
+    for idx, movie in enumerate(recommendations):
         with st.expander(f"📽️ {movie['title']}  (More Info)"):
             st.image(movie['poster'], width=300)
             st.markdown(f"<div class='movie-info'>⭐ <b>Rating:</b> {movie['rating']}/10</div>", unsafe_allow_html=True)
             st.markdown(f"<div class='movie-info'>📅 <b>Release Date:</b> {movie['release_date']}</div>", unsafe_allow_html=True)
             st.markdown(f"<div class='movie-info'>📖 <b>Plot:</b> {movie['plot']}</div>", unsafe_allow_html=True)
             st.markdown(f"<div class='movie-info'>🎬 <b>Director:</b> {movie['director']}</div>", unsafe_allow_html=True)
-            st.markdown(f"<div class='movie-info'>🎭 <b>Cast:</b> {', '.join(movie['cast'])}</div>", unsafe_allow_html=True)
+            st.markdown
