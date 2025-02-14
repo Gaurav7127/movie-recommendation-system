@@ -72,7 +72,7 @@ if bg_image:
         }}
         .title {{
             font-size: 60px; 
-            color: #FF6347;  /* Tomato */
+            color: #FFD700;  /* Gold */
             text-align: center;
             font-family: 'Arial Black', sans-serif;  
             padding: 10px 0;
@@ -101,18 +101,14 @@ if bg_image:
             color: #FFFFFF;
             text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
         }}
-        /* Change the color of Expander Title */
+        /* 🔥 Force Styling for Expander Header */
         div[data-testid="stExpander"] div[role="button"] {{
-            font-size: 20px !important;
+            font-size: 22px !important;
             font-weight: bold !important;
             color: #FFA500 !important; /* Orange */
             background-color: rgba(255, 255, 255, 0.1) !important;
-            padding: 10px !important;
-            border-radius: 10px !important;
-        }}
-        .custom-button {{
-            display: flex;
-            justify-content: center;
+            padding: 12px !important;
+            border-radius: 8px !important;
         }}
         </style>
         """,
@@ -124,7 +120,8 @@ st.markdown('<div class="subtitle">The Right Film, Every Time</div>', unsafe_all
 st.markdown('<div class="selectbox-label">🎬 Find Your Next Watch 🍿</div>', unsafe_allow_html=True)
 
 selected_movie = st.selectbox("", movies["title"].values, key='movie_selectbox')
-if st.button("Let's Go!", key="lets_go"):
+
+if st.button("🔥 Get Recommendations"):
     recommendations = recommend(selected_movie)
 
     for idx, movie in enumerate(recommendations):
