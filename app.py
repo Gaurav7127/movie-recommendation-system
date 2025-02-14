@@ -71,7 +71,7 @@ if bg_image:
         }}
         .title {{
             font-size: 60px; 
-            color: #FFD700;  /* Gold color for better contrast */
+            color: #FF6347;  /* Tomato color */
             text-align: center;
             font-family: 'Arial Black', sans-serif;  
             padding: 10px 0;
@@ -79,7 +79,7 @@ if bg_image:
         }}
         .subtitle {{
             font-size: 24px; 
-            color: #FFFFFF;  /* White color for clarity */
+            color: #FFFFFF;  
             text-align: center;
             font-family: 'Arial', sans-serif;  
             margin-top: -10px;  
@@ -89,24 +89,28 @@ if bg_image:
         .selectbox-label {{
             font-size: 20px;
             font-weight: bold;
-            text-align: left;
-            color: #00FF7F; /* Spring Green for unique contrast */
-            text-align: center;
+            color: #00FF7F; /* Spring Green */
+            text-align: left; 
+            padding-left: 15px;
             margin-bottom: 10px;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
         }}
         .movie-info {{
             font-size: 18px;
-            color: #FFFFFF; /* White for readability */
+            color: #FFFFFF;
             text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
         }}
         .streamlit-expanderHeader {{
-            font-size: 18px !important;
+            font-size: 20px !important;
             font-weight: bold !important;
-            color: #1E90FF !important; /* DodgerBlue */
+            color: #FFA500 !important; /* Orange */
             background-color: rgba(255, 255, 255, 0.1) !important;
             padding: 10px !important;
             border-radius: 10px !important;
+        }}
+        .custom-button {{
+            display: flex;
+            justify-content: center;
         }}
         </style>
         """,
@@ -119,11 +123,38 @@ st.markdown('<div class="selectbox-label">🎬 Find Your Next Watch 🍿</div>',
 
 selected_movie = st.selectbox("", movies["title"].values, key='movie_selectbox')
 
-if st.button("🚀 Show Recommendations"):
+# Custom styled button
+button_html = """
+    <style>
+        .custom-button {
+            display: flex;
+            justify-content: center;
+        }
+        .custom-button button {
+            background-color: #FF4500; /* Orange Red */
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+        }
+        .custom-button button:hover {
+            background-color: #FF6347; /* Tomato */
+        }
+    </style>
+    <div class="custom-button">
+        <button onclick="window.location.reload()">🔥 Let's Go!</button>
+    </div>
+"""
+st.markdown(button_html, unsafe_allow_html=True)
+
+if st.button("Let's Go!", key="lets_go"):
     recommendations = recommend(selected_movie)
 
     for idx, movie in enumerate(recommendations):
-        with st.expander(f"📽️ {movie['title']} (More Info)"):
+        with st.expander(f"📽️ {movie['title']}  (More Info)"):
             st.image(movie['poster'], width=300)
             st.markdown(f"<div class='movie-info'>⭐ <b>Rating:</b> {movie['rating']}/10</div>", unsafe_allow_html=True)
             st.markdown(f"<div class='movie-info'>📅 <b>Release Date:</b> {movie['release_date']}</div>", unsafe_allow_html=True)
