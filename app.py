@@ -110,6 +110,19 @@ if bg_image:
         unsafe_allow_html=True
     )
 
+st.markdown(
+    """
+    <style>
+    div.streamlit-expander div[role="button"] {
+        color: #FFD700 !important; /* Gold color for the expander title */
+        font-size: 18px !important;
+        font-weight: bold !important;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 st.markdown('<h1 class="title">🎬 MovieMatch</h1>', unsafe_allow_html=True)
 st.markdown('<div class="subtitle">The Right Film, Every Time</div>', unsafe_allow_html=True)
 st.markdown('<div class="selectbox-label">🎬 Find Your Next Watch 🍿</div>', unsafe_allow_html=True)
