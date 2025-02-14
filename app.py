@@ -109,7 +109,7 @@ if bg_image:
     }}
     /* Change expander arrow (button) color to white */
     details summary {{
-        color: white !important;
+        color: gold !important;
     }}
     details summary:hover {{
         text-shadow: 0px 0px 5px rgba(255, 255, 255, 0.8);
