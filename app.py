@@ -115,15 +115,7 @@ selected_movie = st.selectbox("", movies["title"].values, key='movie_selectbox')
 if st.button("🔥 Get Recommendations"):
     recommendations = recommend(selected_movie)
 
-    st.markdown
-    (""" 
-    <style> 
-    . streamlit-expanderHeader { background-color: #0e1117; color: orange; 
-    }
-    </style> 
-    """,
-    unsafe_allow_html=True)
-    for idx, movie in enumerate(recommendations):
+   for idx, movie in enumerate(recommendations):
         with st.expander(f"📽️ {movie['title']}  (More Info)"):
             st.image(movie['poster'], width=300)
             st.markdown(f"<div class='movie-info'>⭐ <b>Rating:</b> {movie['rating']}/10</div>", unsafe_allow_html=True)
