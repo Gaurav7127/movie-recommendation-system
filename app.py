@@ -151,29 +151,15 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Expander for movie details
-with st.expander(f"<span style='color: #FFD700;'>📽️ {movie['title']} (More Info)</span>", unsafe_allow_html=True):
-    st.image(movie['poster'], width=300)
-    st.markdown(f"<div class='movie-info'>⭐ <b>Rating:</b> {movie['rating']}/10</div>", unsafe_allow_html=True)
-    st.markdown(f"<div class='movie-info'>📅 <b>Release Date:</b> {movie['release_date']}</div>", unsafe_allow_html=True)
-    st.markdown(f"<div class='movie-info'>📖 <b>Plot:</b> {movie['plot']}</div>", unsafe_allow_html=True)
-    st.markdown(f"<div class='movie-info'>🎬 <b>Director:</b> {movie['director']}</div>", unsafe_allow_html=True)
-    st.markdown(f"<div class='movie-info'>🎭 <b>Cast:</b> {', '.join(movie['cast'])}</div>", unsafe_allow_html=True)
+# Get recommended movies
+recommendations = recommend(selected_movie)
 
-st.markdown('<h1 class="title">🎬 MovieMatch</h1>', unsafe_allow_html=True)
-st.markdown('<div class="subtitle">The Right Film, Every Time</div>', unsafe_allow_html=True)
-st.markdown('<div class="selectbox-label">🎬 Find Your Next Watch 🍿</div>', unsafe_allow_html=True)
-
-selected_movie = st.selectbox("", movies["title"].values, key='movie_selectbox')
-
-if st.button("🚀 Let’s Go"):
-    recommendations = recommend(selected_movie)
-
-    for movie in recommendations:
-        with st.expander(f"📽️ <span style='color: #FFD700;'>{movie['title']} (More Info)</span>", unsafe_allow_html=True):
-            st.image(movie['poster'], width=300)
-            st.markdown(f"<div class='movie-info'>⭐ <b>Rating:</b> {movie['rating']}/10</div>", unsafe_allow_html=True)
-            st.markdown(f"<div class='movie-info'>📅 <b>Release Date:</b> {movie['release_date']}</div>", unsafe_allow_html=True)
-            st.markdown(f"<div class='movie-info'>📖 <b>Plot:</b> {movie['plot']}</div>", unsafe_allow_html=True)
-            st.markdown(f"<div class='movie-info'>🎬 <b>Director:</b> {movie['director']}</div>", unsafe_allow_html=True)
-            st.markdown(f"<div class='movie-info'>🎭 <b>Cast:</b> {', '.join(movie['cast'])}</div>", unsafe_allow_html=True)
+# Display recommended movies
+for movie in recommendations:
+    with st.expander(f"📽️ <span style='color: #FFD700;'>{movie['title']} (More Info)</span>", expanded=False):
+        st.image(movie['poster'], width=300)
+        st.markdown(f"<div class='movie-info'>⭐ <b>Rating:</b> {movie['rating']}/10</div>", unsafe_allow_html=True)
+        st.markdown(f"<div class='movie-info'>📅 <b>Release Date:</b> {movie['release_date']}</div>", unsafe_allow_html=True)
+        st.markdown(f"<div class='movie-info'>📖 <b>Plot:</b> {movie['plot']}</div>", unsafe_allow_html=True)
+        st.markdown(f"<div class='movie-info'>🎬 <b>Director:</b> {movie['director']}</div>", unsafe_allow_html=True)
+        st.markdown(f"<div class='movie-info'>🎭 <b>Cast:</b> {', '.join(movie['cast'])}</div>", unsafe_allow_html=True)
