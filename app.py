@@ -99,6 +99,14 @@ if bg_image:
             color: #FFFFFF; /* White for readability */
             text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
         }}
+        .streamlit-expanderHeader {{
+            font-size: 18px !important;
+            font-weight: bold !important;
+            color: #FFD700 !important; /* Gold color */
+            background-color: rgba(255, 255, 255, 0.1) !important;
+            padding: 10px !important;
+            border-radius: 10px !important;
+        }}
         /* Responsiveness for tablets */
         @media (max-width: 1024px) {{
             .title {{
