@@ -99,62 +99,53 @@ if bg_image:
             color: #FFFFFF; /* White for readability */
             text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
         }}
-        .streamlit-expanderHeader {{
-            font-size: 18px !important;
-            font-weight: bold !important;
-            color: #FFD700 !important; /* Gold color */
-            background-color: rgba(255, 255, 255, 0.1) !important;
-            padding: 10px !important;
-            border-radius: 10px !important;
-        }}
-        /* Responsiveness for tablets */
-        @media (max-width: 1024px) {{
-            .title {{
-                font-size: 40px;
-            }}
-            .subtitle {{
-                font-size: 18px;
-            }}
-            .movie-poster {{
-                height: 220px;
-                width: 150px;
-            }}
-        }}
-        /* Responsiveness for mobile devices */
-        @media (max-width: 768px) {{
-            .title {{
-                font-size: 30px;
-            }}
-            .subtitle {{
-                font-size: 16px;
-            }}
-            .movie-poster {{
-                height: 180px;
-                width: 120px;
-            }}
-            .selectbox-label {{
-                font-size: 14px;
-            }}
-        }}
-        </style>
-        """,
-        unsafe_allow_html=True
-    )
+        /* Custom styling for expander titles */
+    .streamlit-expanderHeader {
+        color: #FFD700 !important;  /* Gold color */
+        font-size: 18px !important;
+        font-weight: bold !important;
+    }
 
-st.markdown('<h1 class="title">🎬 MovieMatch</h1>', unsafe_allow_html=True)
-st.markdown('<div class="subtitle">The Right Film, Every Time</div>', unsafe_allow_html=True)
-st.markdown('<div class="selectbox-label">🎬 Find Your Next Watch 🍿</div>', unsafe_allow_html=True)
+    /* Responsiveness for tablets */
+    @media (max-width: 1024px) {
+        .title {
+            font-size: 40px;
+        }
+        .subtitle {
+            font-size: 18px;
+        }
+        .movie-poster {
+            height: 220px;
+            width: 150px;
+        }
+    }
 
-selected_movie = st.selectbox("", movies["title"].values, key='movie_selectbox')
+    /* Responsiveness for mobile devices */
+    @media (max-width: 768px) {
+        .title {
+            font-size: 30px;
+        }
+        .subtitle {
+            font-size: 16px;
+        }
+        .movie-poster {
+            height: 180px;
+            width: 120px;
+        }
+        .selectbox-label {
+            font-size: 14px;
+        }
+    }
+    </style>
+""", unsafe_allow_html=True)
 
-if st.button("🚀 Let’s Go"):
-    recommendations = recommend(selected_movie)
-
-    for movie in recommendations:
-        with st.expander(f"📽️ <span style='color: #FFD700;'>{movie['title']} (More Info)</span>", unsafe_allow_html=True):
-            st.image(movie['poster'], width=300)
-            st.markdown(f"<div class='movie-info'>⭐ <b>Rating:</b> {movie['rating']}/10</div>", unsafe_allow_html=True)
-            st.markdown(f"<div class='movie-info'>📅 <b>Release Date:</b> {movie['release_date']}</div>", unsafe_allow_html=True)
-            st.markdown(f"<div class='movie-info'>📖 <b>Plot:</b> {movie['plot']}</div>", unsafe_allow_html=True)
-            st.markdown(f"<div class='movie-info'>🎬 <b>Director:</b> {movie['director']}</div>", unsafe_allow_html=True)
-            st.markdown(f"<div class='movie-info'>🎭 <b>Cast:</b> {', '.join(movie['cast'])}</div>", unsafe_allow_html=True)
+for idx, movie in enumerate(recommendations):
+    expander_text = f"<span style='color: #FFD700;'>📽️ {movie['title']} (More Info)</span>"
+    with st.expander(movie["title"]):  # Expander still uses normal text
+        st.markdown(expander_text, unsafe_allow_html=True)  # This changes the text color
+        st.image(movie['poster'], width=300)
+        st.markdown(f"<div class='movie-info'>⭐ <b>Rating:</b> {movie['rating']}/10</div>", unsafe_allow_html=True)
+        st.markdown(f"<div class='movie-info'>📅 <b>Release Date:</b> {movie['release_date']}</div>", unsafe_allow_html=True)
+        st.markdown(f"<div class='movie-info'>📖 <b>Plot:</b> {movie['plot']}</div>", unsafe_allow_html=True)
+        st.markdown(f"<div class='movie-info'>🎬 <b>Director:</b> {movie['director']}</div>", unsafe_allow_html=True)
+        st.markdown(f"<div class='movie-info'>🎭 <b>Cast:</b> {', '.join(movie['cast'])}</div>", unsafe_allow_html=True)
