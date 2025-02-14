@@ -107,7 +107,8 @@ if bg_image:
     font-size: 18px;
     color: #FFFFFF; /* White for readability */
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
-}
+}}
+    
 
 /* Customize Expander Button */
 details summary {{
