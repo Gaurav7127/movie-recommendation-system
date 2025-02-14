@@ -51,13 +51,13 @@ def recommend(movie):
     except Exception as e:
         return [{"title": "Error fetching recommendations", "poster": "", "rating": "", "release_date": "", "plot": "", "director": "", "cast": []}]
 
-# Apply background image (optional)
 def get_base64_image(image_path):
     if os.path.exists(image_path):
         with open(image_path, "rb") as img_file:
             return base64.b64encode(img_file.read()).decode()
     return None
 
+# Load background image
 bg_image = get_base64_image('234234-1140x641.jpg')
 
 if bg_image:
@@ -72,57 +72,43 @@ if bg_image:
         }}
         .title {{
             font-size: 60px; 
-            color: #FFD700;  /* Gold */
+            color: #FFD700;
             text-align: center;
-            font-family: 'Arial Black', sans-serif;  
+            font-family: 'Arial Black', sans-serif;
             padding: 10px 0;
             text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
         }}
         .subtitle {{
             font-size: 24px; 
-            color: #FFFFFF;  
+            color: #FFFFFF;
             text-align: center;
-            font-family: 'Arial', sans-serif;  
-            margin-top: -10px;  
+            font-family: 'Arial', sans-serif;
+            margin-top: -10px;
             padding-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);  
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
         }}
         .selectbox-label {{
             font-size: 20px;
             font-weight: bold;
-            color: #00FF7F; /* Spring Green */
-            text-align: left; 
-            padding-left: 15px;
+            text-align: left;
+            color: #00FF7F;
             margin-bottom: 10px;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
         }}
-        .movie-info {{
-            font-size: 18px;
-            color: #FFFFFF;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
+        .expander-title {{
+            color: #FFD700 !important;
+            font-size: 18px !important;
+            font-weight: bold !important;
+        }}
+        .streamlit-expanderHeader {{
+            background-color: #0e1117 !important;
+            color: white !important;
+            padding: 10px !important;
+            border-radius: 10px !important;
         }}
         </style>
         """,
         unsafe_allow_html=True
     )
-
-# 🔥 Dedicated CSS for Expander Styling
-st.markdown(
-    """
-    <style>
-    {
-        background-color: #0e1117 !important;
-        color: white !important;
-        font-size: 20px !important;
-        font-weight: bold !important;
-        padding: 12px !important;
-        border-radius: 8px !important;
-        text-align: left !important;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
 
 st.markdown('<h1 class="title">🎬 MovieMatch</h1>', unsafe_allow_html=True)
 st.markdown('<div class="subtitle">The Right Film, Every Time</div>', unsafe_allow_html=True)
@@ -130,14 +116,15 @@ st.markdown('<div class="selectbox-label">🎬 Find Your Next Watch 🍿</div>',
 
 selected_movie = st.selectbox("", movies["title"].values, key='movie_selectbox')
 
-if st.button("🔥 Let's Goo🚀"):
+if st.button("🚀 Let's Go"):
     recommendations = recommend(selected_movie)
 
     for idx, movie in enumerate(recommendations):
-        with st.expander(f"📽️ {movie['title']}  (More Info)"):
+        with st.expander(f"📽️ {movie['title']} (More Info)"):
+            st.markdown(f"<div class='expander-title'>📽️ {movie['title']}</div>", unsafe_allow_html=True)
             st.image(movie['poster'], width=300)
             st.markdown(f"<div class='movie-info'>⭐ <b>Rating:</b> {movie['rating']}/10</div>", unsafe_allow_html=True)
             st.markdown(f"<div class='movie-info'>📅 <b>Release Date:</b> {movie['release_date']}</div>", unsafe_allow_html=True)
             st.markdown(f"<div class='movie-info'>📖 <b>Plot:</b> {movie['plot']}</div>", unsafe_allow_html=True)
             st.markdown(f"<div class='movie-info'>🎬 <b>Director:</b> {movie['director']}</div>", unsafe_allow_html=True)
-            st.markdown
+            st.markdown(f"<div class='movie-info'>🎭 <b>Cast:</b> {', '.join(movie['cast'])}</div>", unsafe_allow_html=True)
