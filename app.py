@@ -62,60 +62,127 @@ bg_image = get_base64_image('234234-1140x641.jpg')
 if bg_image:
     st.markdown(
     f"""
-    <style>
-    .stApp {{
-        background-image: url("data:image/jpeg;base64,{bg_image}");
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-    }}
-    .title {{
-        font-size: 60px; 
-        color: #FFD700;
-        text-align: center;
-        font-family: 'Arial Black', sans-serif;
-        padding: 10px 0;
-        text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
-    }}
-    .subtitle {{
-        font-size: 24px;
-        color: #FFFFFF;
-        text-align: center;
-        font-family: 'Arial', sans-serif;
-        margin-top: -10px;
-        padding-bottom: 20px;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
-    }}
-    .selectbox-label {{
-        font-size: 20px;
-        font-weight: bold;
-        text-align: left;
-        color: #00FF7F;
-        margin-bottom: 10px;
-        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
-    }}
-    .movie-info {{
+   <style>
+/* Set background image for the entire app */
+.stApp {
+    background-image: url("data:image/jpeg;base64,{bg_image}");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* Title Styling */
+.title {
+    font-size: 60px; 
+    color: #FFD700;  /* Gold color */
+    text-align: center;
+    font-family: 'Arial Black', sans-serif;
+    padding: 10px 0;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
+}
+
+/* Subtitle Styling */
+.subtitle {
+    font-size: 24px;
+    color: #FFFFFF;
+    text-align: center;
+    font-family: 'Arial', sans-serif;
+    margin-top: -10px;
+    padding-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* Label for Selectbox */
+.selectbox-label {
+    font-size: 20px;
+    font-weight: bold;
+    text-align: left;
+    color: #00FF7F; /* Spring Green */
+    margin-bottom: 10px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+}
+
+/* Movie Information Text */
+.movie-info {
+    font-size: 18px;
+    color: #FFFFFF; /* White for readability */
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+/* Customize Expander Button */
+details summary {
+    color: rgba(255, 255, 255, 0.8) !important;  /* Soft white */
+    font-weight: bold;
+    font-size: 18px;
+    transition: all 0.3s ease-in-out;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+/* Expander Hover Effect */
+details summary:hover {
+    color: #FFD700 !important;  /* Gold hover */
+    text-shadow: 0px 0px 8px rgba(255, 215, 0, 0.9);  /* Glow effect */
+    transform: scale(1.05);
+}
+
+/* Expander Background */
+details {
+    background-color: rgba(0, 0, 0, 0.5) !important;  /* Dark semi-transparent */
+    border-radius: 8px;
+    padding: 5px;
+}
+
+/* Customize the Let’s Go Button */
+button {
+    background-color: #FFD700 !important;  /* Gold */
+    color: #000000 !important;  /* Black text */
+    font-weight: bold;
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-size: 16px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease-in-out;
+}
+
+/* Button Hover */
+button:hover {
+    background-color: #FFA500 !important;  /* Orange */
+    transform: scale(1.05);
+}
+
+/* Responsiveness for Tablets */
+@media (max-width: 1024px) {
+    .title {
+        font-size: 40px;
+    }
+    .subtitle {
         font-size: 18px;
-        color: #FFFFFF;
-        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
-    }}
-    .streamlit-expanderHeader {{
-        font-size: 18px !important;
-        font-weight: bold !important;
-        color: #FFD700 !important;
-        background-color: rgba(255, 255, 255, 0.1) !important;
-        padding: 10px !important;
-        border-radius: 10px !important;
-    }}
-    /* Change expander arrow (button) color to white */
-    details summary {{
-        color: gold !important;
-    }}
-    details summary:hover {{
-        text-shadow: 0px 0px 5px rgba(255, 255, 255, 0.8);
-    }}
-    </style>
-    """,
+    }
+    .movie-poster {
+        height: 220px;
+        width: 150px;
+    }
+}
+
+/* Responsiveness for Mobile */
+@media (max-width: 768px) {
+    .title {
+        font-size: 30px;
+    }
+    .subtitle {
+        font-size: 16px;
+    }
+    .movie-poster {
+        height: 180px;
+        width: 120px;
+    }
+    .selectbox-label {
+        font-size: 14px;
+    }
+}
+</style>
+ """,
     unsafe_allow_html=True
 )
 
