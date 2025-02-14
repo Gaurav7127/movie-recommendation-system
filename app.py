@@ -124,34 +124,6 @@ st.markdown('<div class="subtitle">The Right Film, Every Time</div>', unsafe_all
 st.markdown('<div class="selectbox-label">🎬 Find Your Next Watch 🍿</div>', unsafe_allow_html=True)
 
 selected_movie = st.selectbox("", movies["title"].values, key='movie_selectbox')
-
-# Custom styled button
-button_html = """
-    <style>
-        .custom-button {
-            display: flex;
-            justify-content: center;
-        }
-        .custom-button button {
-            background-color: #FF4500; /* Orange Red */
-            color: white;
-            font-size: 18px;
-            font-weight: bold;
-            padding: 10px 20px;
-            border-radius: 10px;
-            border: none;
-            cursor: pointer;
-        }
-        .custom-button button:hover {
-            background-color: #FF6347; /* Tomato */
-        }
-    </style>
-    <div class="custom-button">
-        <button onclick="window.location.reload()">🔥 Let's Go!</button>
-    </div>
-"""
-st.markdown(button_html, unsafe_allow_html=True)
-
 if st.button("Let's Go!", key="lets_go"):
     recommendations = recommend(selected_movie)
 
