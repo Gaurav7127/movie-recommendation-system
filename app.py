@@ -151,7 +151,8 @@ if st.button("🚀 Let’s Go"):
     recommendations = recommend(selected_movie)
 
     for movie in recommendations:
-        with st.expander(f"📽️ <span style='color: #FFD700;'>{movie['title']} (More Info)</span>", unsafe_allow_html=True):
+        with st.expander(f"📽️ {movie['title']} (More Info)"):
+    st.markdown(f"<span style='color: #FFD700; font-size:18px; font-weight:bold;'>{movie['title']} (More Info)</span>", unsafe_allow_html=True)
             st.image(movie['poster'], width=300)
             st.markdown(f"<div class='movie-info'>⭐ <b>Rating:</b> {movie['rating']}/10</div>", unsafe_allow_html=True)
             st.markdown(f"<div class='movie-info'>📅 <b>Release Date:</b> {movie['release_date']}</div>", unsafe_allow_html=True)
