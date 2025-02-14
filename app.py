@@ -101,15 +101,6 @@ if bg_image:
             color: #FFFFFF;
             text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
         }}
-        /* 🔥 Force Styling for Expander Header */
-        div[data-testid="stExpander"] div[role="button"] {{
-            font-size: 22px !important;
-            font-weight: bold !important;
-            color: #FFA500 !important; /* Orange */
-            background-color: rgba(255, 255, 255, 0.1) !important;
-            padding: 12px !important;
-            border-radius: 8px !important;
-        }}
         </style>
         """,
         unsafe_allow_html=True
@@ -124,6 +115,14 @@ selected_movie = st.selectbox("", movies["title"].values, key='movie_selectbox')
 if st.button("🔥 Get Recommendations"):
     recommendations = recommend(selected_movie)
 
+    st.markdown
+    (""" 
+    <style> 
+    . streamlit-expanderHeader { background-color: #0e1117; color: orange; 
+    }
+    </style> 
+    """,
+    unsafe_allow_html=True)
     for idx, movie in enumerate(recommendations):
         with st.expander(f"📽️ {movie['title']}  (More Info)"):
             st.image(movie['poster'], width=300)
