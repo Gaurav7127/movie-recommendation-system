@@ -61,85 +61,63 @@ bg_image = get_base64_image('234234-1140x641.jpg')
 
 if bg_image:
     st.markdown(
-        f"""
-        <style>
-        .stApp {{
-            background-image: url("data:image/jpeg;base64,{bg_image}");
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-        }}
-        .title {{
-            font-size: 60px; 
-            color: #FFD700;  /* Gold color for better contrast */
-            text-align: center;
-            font-family: 'Arial Black', sans-serif;  
-            padding: 10px 0;
-            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
-        }}
-        .subtitle {{
-            font-size: 24px; 
-            color: #FFFFFF;  /* White color for clarity */
-            text-align: center;
-            font-family: 'Arial', sans-serif;  
-            margin-top: -10px;  
-            padding-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);  
-        }}
-        .selectbox-label {{
-            font-size: 20px;
-            font-weight: bold;
-            text-align: left;
-            color: #00FF7F; /* Spring Green for unique contrast */
-            margin-bottom: 10px;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
-        }}
-        .movie-info {{
-            font-size: 18px;
-            color: #FFFFFF; /* White for readability */
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
-        }}
-        .streamlit-expanderHeader {{
-            font-size: 18px !important;
-            font-weight: bold !important;
-            color: #FFD700 !important; /* Gold color */
-            background-color: rgba(255, 255, 255, 0.1) !important;
-            padding: 10px !important;
-            border-radius: 10px !important;
-        }}
-        /* Responsiveness for tablets */
-        @media (max-width: 1024px) {{
-            .title {{
-                font-size: 40px;
-            }}
-            .subtitle {{
-                font-size: 18px;
-            }}
-            .movie-poster {{
-                height: 220px;
-                width: 150px;
-            }}
-        }}
-        /* Responsiveness for mobile devices */
-        @media (max-width: 768px) {{
-            .title {{
-                font-size: 30px;
-            }}
-            .subtitle {{
-                font-size: 16px;
-            }}
-            .movie-poster {{
-                height: 180px;
-                width: 120px;
-            }}
-            .selectbox-label {{
-                font-size: 14px;
-            }}
-        }}
-        </style>
-        """,
-        unsafe_allow_html=True
-    )
+    f"""
+    <style>
+    .stApp {{
+        background-image: url("data:image/jpeg;base64,{bg_image}");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }}
+    .title {{
+        font-size: 60px; 
+        color: #FFD700;
+        text-align: center;
+        font-family: 'Arial Black', sans-serif;
+        padding: 10px 0;
+        text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
+    }}
+    .subtitle {{
+        font-size: 24px;
+        color: #FFFFFF;
+        text-align: center;
+        font-family: 'Arial', sans-serif;
+        margin-top: -10px;
+        padding-bottom: 20px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    }}
+    .selectbox-label {{
+        font-size: 20px;
+        font-weight: bold;
+        text-align: left;
+        color: #00FF7F;
+        margin-bottom: 10px;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+    }}
+    .movie-info {{
+        font-size: 18px;
+        color: #FFFFFF;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
+    }}
+    .streamlit-expanderHeader {{
+        font-size: 18px !important;
+        font-weight: bold !important;
+        color: #FFD700 !important;
+        background-color: rgba(255, 255, 255, 0.1) !important;
+        padding: 10px !important;
+        border-radius: 10px !important;
+    }}
+    /* Change expander arrow (button) color to white */
+    details summary {{
+        color: white !important;
+    }}
+    details summary:hover {{
+        text-shadow: 0px 0px 5px rgba(255, 255, 255, 0.8);
+    }}
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
 st.markdown('<h1 class="title">🎬 MovieMatch</h1>', unsafe_allow_html=True)
 st.markdown('<div class="subtitle">The Right Film, Every Time</div>', unsafe_allow_html=True)
