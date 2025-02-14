@@ -136,7 +136,7 @@ if bg_image:
     /* Customize the Let’s Go Button */
     button {{
         background-color: #FFD700 !important;  /* Gold */
-        color: white !important;  /* Black text */
+        color: black !important;  /* Black text */
         font-weight: bold;
         border-radius: 10px;
         padding: 10px 20px;
