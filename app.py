@@ -57,7 +57,6 @@ def get_base64_image(image_path):
             return base64.b64encode(img_file.read()).decode()
     return None
 
-# Load background image
 bg_image = get_base64_image('234234-1140x641.jpg')
 
 if bg_image:
@@ -72,56 +71,76 @@ if bg_image:
         }}
         .title {{
             font-size: 60px; 
-            color: #FFD700;
+            color: #FFD700;  /* Gold color for better contrast */
             text-align: center;
-            font-family: 'Arial Black', sans-serif;
+            font-family: 'Arial Black', sans-serif;  
             padding: 10px 0;
             text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
         }}
         .subtitle {{
             font-size: 24px; 
-            color: #FFFFFF;
+            color: #FFFFFF;  /* White color for clarity */
             text-align: center;
-            font-family: 'Arial', sans-serif;
-            margin-top: -10px;
+            font-family: 'Arial', sans-serif;  
+            margin-top: -10px;  
             padding-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);  
         }}
         .selectbox-label {{
             font-size: 20px;
             font-weight: bold;
             text-align: left;
-            color: #00FF7F;
+            color: #FFD700; /* Gold for better visibility */
             margin-bottom: 10px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
         }}
-        .expander-title {{
-            color: #FFD700 !important;
+        div.streamlit-expander div[role="button"] {{
+            color: #FFD700 !important; /* Gold for visibility */
             font-size: 18px !important;
             font-weight: bold !important;
         }}
-        .streamlit-expanderHeader {{
-            background-color: #0e1117 !important;
-            color: white !important;
-            padding: 10px !important;
+        div.streamlit-expander {{
+            background-color: rgba(0, 0, 0, 0.7) !important; /* Semi-transparent black */
             border-radius: 10px !important;
+            padding: 5px !important;
         }}
+        div.stButton > button {{
+            display: none !important; /* Hide the Let's Go button */
+        }}
+         /* Responsiveness for tablets */
+    @media (max-width: 1024px) {{
+        .title {{
+            font-size: 40px;
+        }}
+        .subtitle {{
+            font-size: 18px;
+        }}
+        .movie-poster {{
+            height: 220px;
+            width: 150px;
+        }}
+    }}
+
+    /* Responsiveness for mobile devices */
+    @media (max-width: 768px) {{
+        .title {{
+            font-size: 30px;
+        }}
+        .subtitle {{
+            font-size: 16px;
+        }}
+        .movie-poster {{
+            height: 180px;
+            width: 120px;
+        }}
+        .selectbox-label {{
+            font-size: 14px;
+        }}
+    }}
         </style>
         """,
         unsafe_allow_html=True
     )
-
-st.markdown(
-    """
-    <style>
-    div.streamlit-expander div[role="button"] {
-        color: #FFD700 !important; /* Gold color for the expander title */
-        font-size: 18px !important;
-        font-weight: bold !important;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
 
 st.markdown('<h1 class="title">🎬 MovieMatch</h1>', unsafe_allow_html=True)
 st.markdown('<div class="subtitle">The Right Film, Every Time</div>', unsafe_allow_html=True)
@@ -129,12 +148,11 @@ st.markdown('<div class="selectbox-label">🎬 Find Your Next Watch 🍿</div>',
 
 selected_movie = st.selectbox("", movies["title"].values, key='movie_selectbox')
 
-if st.button("🚀 Let's Go"):
+if st.button("🚀 Show Recommendations"):
     recommendations = recommend(selected_movie)
 
     for idx, movie in enumerate(recommendations):
         with st.expander(f"📽️ {movie['title']} (More Info)"):
-            st.markdown(f"<div class='expander-title'>📽️ {movie['title']}</div>", unsafe_allow_html=True)
             st.image(movie['poster'], width=300)
             st.markdown(f"<div class='movie-info'>⭐ <b>Rating:</b> {movie['rating']}/10</div>", unsafe_allow_html=True)
             st.markdown(f"<div class='movie-info'>📅 <b>Release Date:</b> {movie['release_date']}</div>", unsafe_allow_html=True)
