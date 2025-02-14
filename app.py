@@ -100,43 +100,42 @@ if bg_image:
             text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
         }}
         .streamlit-expanderHeader {{
-            background-color: #0e1117 !important;
-            color: white !important;
             font-size: 18px !important;
             font-weight: bold !important;
+            color: #FFD700 !important; /* Gold color */
+            background-color: rgba(255, 255, 255, 0.1) !important;
             padding: 10px !important;
             border-radius: 10px !important;
         }}
         /* Responsiveness for tablets */
-    @media (max-width: 1024px) {{
-        .title {{
-            font-size: 40px;
+        @media (max-width: 1024px) {{
+            .title {{
+                font-size: 40px;
+            }}
+            .subtitle {{
+                font-size: 18px;
+            }}
+            .movie-poster {{
+                height: 220px;
+                width: 150px;
+            }}
         }}
-        .subtitle {{
-            font-size: 18px;
+        /* Responsiveness for mobile devices */
+        @media (max-width: 768px) {{
+            .title {{
+                font-size: 30px;
+            }}
+            .subtitle {{
+                font-size: 16px;
+            }}
+            .movie-poster {{
+                height: 180px;
+                width: 120px;
+            }}
+            .selectbox-label {{
+                font-size: 14px;
+            }}
         }}
-        .movie-poster {{
-            height: 220px;
-            width: 150px;
-        }}
-    }}
-
-    /* Responsiveness for mobile devices */
-    @media (max-width: 768px) {{
-        .title {{
-            font-size: 30px;
-        }}
-        .subtitle {{
-            font-size: 16px;
-        }}
-        .movie-poster {{
-            height: 180px;
-            width: 120px;
-        }}
-        .selectbox-label {{
-            font-size: 14px;
-        }}
-    }}
         </style>
         """,
         unsafe_allow_html=True
@@ -148,11 +147,11 @@ st.markdown('<div class="selectbox-label">🎬 Find Your Next Watch 🍿</div>',
 
 selected_movie = st.selectbox("", movies["title"].values, key='movie_selectbox')
 
-if st.button("🚀 Let's Go"):
+if st.button("🚀 Let’s Go"):
     recommendations = recommend(selected_movie)
 
-    for idx, movie in enumerate(recommendations):
-        with st.expander(f"📽️ <span style='color: #FFD700;'>{movie['title']} (More Info)</span>", expanded=False):
+    for movie in recommendations:
+        with st.expander(f"📽️ <span style='color: #FFD700;'>{movie['title']} (More Info)</span>", unsafe_allow_html=True):
             st.image(movie['poster'], width=300)
             st.markdown(f"<div class='movie-info'>⭐ <b>Rating:</b> {movie['rating']}/10</div>", unsafe_allow_html=True)
             st.markdown(f"<div class='movie-info'>📅 <b>Release Date:</b> {movie['release_date']}</div>", unsafe_allow_html=True)
