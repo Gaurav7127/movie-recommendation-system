@@ -69,7 +69,7 @@ if bg_image:
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-}
+}}
 
 /* Title Styling */
 .title {{
@@ -79,7 +79,7 @@ if bg_image:
     font-family: 'Arial Black', sans-serif;
     padding: 10px 0;
     text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
-}
+}}
 
 /* Subtitle Styling */
 .subtitle {{
@@ -90,7 +90,7 @@ if bg_image:
     margin-top: -10px;
     padding-bottom: 20px;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
-}
+}}
 
 /* Label for Selectbox */
 .selectbox-label {{
@@ -100,7 +100,7 @@ if bg_image:
     color: #00FF7F; /* Spring Green */
     margin-bottom: 10px;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
-}
+}}
 
 /* Movie Information Text */
 .movie-info {{
@@ -117,21 +117,24 @@ details summary {{
     transition: all 0.3s ease-in-out;
     padding: 10px;
     border-radius: 8px;
-}
+}}
+
 
 /* Expander Hover Effect */
 details summary:hover {{
     color: #FFD700 !important;  /* Gold hover */
     text-shadow: 0px 0px 8px rgba(255, 215, 0, 0.9);  /* Glow effect */
     transform: scale(1.05);
-}
+}}
+
 
 /* Expander Background */
 details {{
     background-color: rgba(0, 0, 0, 0.5) !important;  /* Dark semi-transparent */
     border-radius: 8px;
     padding: 5px;
-}
+}}
+
 
 /* Customize the Let’s Go Button */
 button {{
@@ -143,13 +146,13 @@ button {{
     font-size: 16px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
     transition: all 0.3s ease-in-out;
-}
+}}
 
 /* Button Hover */
 button:hover {{
     background-color: #FFA500 !important;  /* Orange */
     transform: scale(1.05);
-}
+}}
 
 /* Responsiveness for Tablets */
 @media (max-width: 1024px) {{
@@ -162,7 +165,8 @@ button:hover {{
     .movie-poster {
         height: 220px;
         width: 150px;
-    }
+}}
+    
 }
 
 /* Responsiveness for Mobile */
@@ -179,7 +183,7 @@ button:hover {{
     }
     .selectbox-label {
         font-size: 14px;
-    }
+    }]
 }
 </style>
  """,
