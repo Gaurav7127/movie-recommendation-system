@@ -5,7 +5,7 @@ import pickle
 import base64
 import os
 
-# Load the data
+
 movies_dict = pickle.load(open('movies_dict.pkl', 'rb'))
 movies = pd.DataFrame(movies_dict)
 similarity = pickle.load(open('similarity.pkl', 'rb'))
@@ -63,15 +63,12 @@ if bg_image:
     st.markdown(
     f"""
     <style>
-    /* Set background image for the entire app */
     .stApp {{
         background-image: url("data:image/jpeg;base64,{bg_image}");
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
     }}
-
-    /* Title Styling */
     .title {{
         font-size: 60px; 
         color: #FFD700;  /* Gold color */
@@ -91,8 +88,6 @@ if bg_image:
         padding-bottom: 20px;
         text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
     }}
-
-    /* Label for Selectbox */
     .selectbox-label {{
         font-size: 20px;
         font-weight: bold;
@@ -101,15 +96,11 @@ if bg_image:
         margin-bottom: 10px;
         text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
     }}
-
-    /* Movie Information Text */
     .movie-info {{
         font-size: 18px;
         color: #FFFFFF; /* White for readability */
         text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
     }}
-
-    /* Customize Expander Button */
     details summary {{
         color: rgba(255, 255, 255, 0.8) !important;  /* Soft white */
         font-weight: bold;
@@ -118,22 +109,16 @@ if bg_image:
         padding: 10px;
         border-radius: 8px;
     }}
-
-    /* Expander Hover Effect */
     details summary:hover {{
         color: #FFD700 !important;  /* Gold hover */
         text-shadow: 0px 0px 8px rgba(255, 215, 0, 0.9);  /* Glow effect */
         transform: scale(1.05);
     }}
-
-    /* Expander Background */
     details {{
         background-color: rgba(0, 0, 0, 0.5) !important;  /* Dark semi-transparent */
         border-radius: 8px;
         padding: 5px;
     }}
-
-    /* Customize the Let’s Go Button */
     button {{
         background-color: #FFD700 !important;  /* Gold */
         color: #000000 !important;  /* Black text */
@@ -144,14 +129,10 @@ if bg_image:
         box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
         transition: all 0.3s ease-in-out;
     }}
-
-    /* Button Hover */
     button:hover {{
         background-color: #FFA500 !important;  /* Orange */
         transform: scale(1.05);
     }}
-
-    /* Responsiveness for Tablets */
     @media (max-width: 1024px) {{
         .title {{
             font-size: 40px;
@@ -164,8 +145,6 @@ if bg_image:
             width: 150px;
         }}
     }}
-
-    /* Responsiveness for Mobile */
     @media (max-width: 768px) {{
         .title {{
             font-size: 30px;
