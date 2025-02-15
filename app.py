@@ -3,8 +3,9 @@ import pandas as pd
 import requests
 import pickle
 import base64
+import os
 
-# Load data
+# Load the data
 movies_dict = pickle.load(open('movies_dict.pkl', 'rb'))
 movies = pd.DataFrame(movies_dict)
 similarity = pickle.load(open('similarity.pkl', 'rb'))
@@ -12,8 +13,8 @@ similarity = pickle.load(open('similarity.pkl', 'rb'))
 API_KEY = "8d45dcb1eefec0761446c65d574e58a6"
 IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500"
 
+# Function to fetch movie details
 def fetch_movie_details(movie_id):
-    """ Fetch movie details including poster, rating, release date, plot, and cast. """
     try:
         movie_url = f'https://api.themoviedb.org/3/movie/{movie_id}?api_key={API_KEY}&language=en-US'
         credits_url = f'https://api.themoviedb.org/3/movie/{movie_id}/credits?api_key={API_KEY}&language=en-US'
@@ -33,8 +34,8 @@ def fetch_movie_details(movie_id):
     except Exception as e:
         return {"error": str(e)}
 
+# Function to get recommended movies
 def recommend(movie):
-    """ Get recommended movies. """
     try:
         movie_index = movies[movies['title'] == movie].index[0]
         distances = similarity[movie_index]
@@ -50,123 +51,121 @@ def recommend(movie):
     except Exception as e:
         return [{"title": "Error fetching recommendations", "poster": "", "rating": "", "release_date": "", "plot": "", "director": "", "cast": []}]
 
-# Initialize session state to track which movie is expanded
-if "expanded_movie" not in st.session_state:
-    st.session_state.expanded_movie = None
+# Function to load background image
+def get_base64_image(image_path):
+    if os.path.exists(image_path):
+        with open(image_path, "rb") as img_file:
+            return base64.b64encode(img_file.read()).decode()
+    return None
 
-# Convert background image to Base64
-bg_base64 = base64.b64encode(bg_image).decode()
+# Load and encode background image
+bg_base64 = get_base64_image('background.jpg')
 
-# Inject Custom CSS with your background image
-st.markdown(
-    f"""
-    <style>
-    .stApp {{
-        background-image: url("data:image/jpeg;base64,{bg_base64}");
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-    }}
+# Apply CSS with background image
+if bg_base64:
+    st.markdown(
+        f"""
+        <style>
+        .stApp {{
+            background-image: url("data:image/jpeg;base64,{bg_base64}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }}
+        .title {{
+            font-size: 60px; 
+            color: #FFD700;
+            text-align: center;
+            font-family: 'Arial Black', sans-serif;
+            padding: 10px 0;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
+        }}
+        .subtitle {{
+            font-size: 24px;
+            color: #FFFFFF;
+            text-align: center;
+            font-family: 'Arial', sans-serif;
+            margin-top: -10px;
+            padding-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+        }}
+        .selectbox-label {{
+            font-size: 20px;
+            font-weight: bold;
+            text-align: left;
+            color: #00FF7F;
+            margin-bottom: 10px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+        }}
+        .movie-info {{
+            font-size: 18px;
+            color: #FFFFFF;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
+        }}
+        details {{
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+            padding: 5px;
+        }}
+        details summary {{
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: bold;
+            font-size: 18px;
+            padding: 10px;
+            border-radius: 8px;
+            transition: all 0.3s ease-in-out;
+        }}
+        details summary:hover {{
+            color: #FFD700;
+            text-shadow: 0px 0px 8px rgba(255, 215, 0, 0.9);
+            transform: scale(1.05);
+        }}
+        button {{
+            background-color: #FFD700;
+            color: #000000;
+            font-weight: bold;
+            border-radius: 10px;
+            padding: 10px 20px;
+            font-size: 16px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease-in-out;
+        }}
+        button:hover {{
+            background-color: #FFA500;
+            transform: scale(1.05);
+        }}
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
 
-    .title {{
-        font-size: 60px; 
-        color: #FFD700;  
-        text-align: center;
-        font-family: 'Arial Black', sans-serif;
-        padding: 10px 0;
-        text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
-    }}
-
-    .subtitle {{
-        font-size: 24px;
-        color: #FFFFFF;
-        text-align: center;
-        font-family: 'Arial', sans-serif;
-        margin-top: -10px;
-        padding-bottom: 20px;
-        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
-    }}
-
-    .selectbox-label {{
-        font-size: 20px;
-        font-weight: bold;
-        text-align: left;
-        color: #00FF7F;
-        margin-bottom: 10px;
-        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
-    }}
-
-    .movie-info {{
-        font-size: 18px;
-        color: #FFFFFF;
-        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
-    }}
-
-    details summary {{
-        color: rgba(255, 255, 255, 0.8) !important;
-        font-weight: bold;
-        font-size: 18px;
-        transition: all 0.3s ease-in-out;
-        padding: 10px;
-        border-radius: 8px;
-    }}
-
-    details summary:hover {{
-        color: #FFD700 !important;
-        text-shadow: 0px 0px 8px rgba(255, 215, 0, 0.9);
-        transform: scale(1.05);
-    }}
-
-    details {{
-        background-color: rgba(0, 0, 0, 0.5) !important;
-        border-radius: 8px;
-        padding: 5px;
-    }}
-
-    button {{
-        background-color: #FFD700 !important;
-        color: #000000 !important;
-        font-weight: bold;
-        border-radius: 10px;
-        padding: 10px 20px;
-        font-size: 16px;
-        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
-        transition: all 0.3s ease-in-out;
-    }}
-
-    button:hover {{
-        background-color: #FFA500 !important;
-        transform: scale(1.05);
-    }}
-
-    @media (max-width: 1024px) {{
-        .title {{ font-size: 40px; }}
-        .subtitle {{ font-size: 18px; }}
-    }}
-
-    @media (max-width: 768px) {{
-        .title {{ font-size: 30px; }}
-        .subtitle {{ font-size: 16px; }}
-    }}
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-
+# UI Components
 st.markdown('<h1 class="title">🎬 MovieMatch</h1>', unsafe_allow_html=True)
 st.markdown('<div class="subtitle">The Right Film, Every Time</div>', unsafe_allow_html=True)
 st.markdown('<div class="selectbox-label">🎬 Find Your Next Watch 🍿</div>', unsafe_allow_html=True)
 
+# Select movie
 selected_movie = st.selectbox("", movies["title"].values, key='movie_selectbox')
 
+# State management for expanders
+if "expanded_movie" not in st.session_state:
+    st.session_state.expanded_movie = None
+
+# When the "Let's Go" button is clicked
 if st.button("🚀 Let’s Go"):
     recommendations = recommend(selected_movie)
 
-    for index, movie in enumerate(recommendations):
-        expander_key = f"expander_{index}"
-        expanded = st.session_state.expanded_movie == expander_key
+    # Store the selected movie to control which expander is open
+    st.session_state.expanded_movie = None  
+
+    for i, movie in enumerate(recommendations):
+        # If this movie is selected, expand it; otherwise, keep it collapsed
+        expanded = st.session_state.expanded_movie == i
 
         with st.expander(f"📽️ {movie['title']} (More Info)", expanded=expanded):
+            if st.button(f"🔽 Open {movie['title']}", key=f"btn_{i}"):
+                st.session_state.expanded_movie = i  # Set this movie as expanded
+            
             st.markdown(f"<span style='color: #FFD700; font-size:18px; font-weight:bold;'>{movie['title']}</span>", unsafe_allow_html=True)
             st.image(movie['poster'], width=300)
             st.markdown(f"<div class='movie-info'>⭐ <b>Rating:</b> {movie['rating']}/10</div>", unsafe_allow_html=True)
@@ -174,6 +173,3 @@ if st.button("🚀 Let’s Go"):
             st.markdown(f"<div class='movie-info'>📖 <b>Plot:</b> {movie['plot']}</div>", unsafe_allow_html=True)
             st.markdown(f"<div class='movie-info'>🎬 <b>Director:</b> {movie['director']}</div>", unsafe_allow_html=True)
             st.markdown(f"<div class='movie-info'>🎭 <b>Cast:</b> {', '.join(movie['cast'])}</div>", unsafe_allow_html=True)
-
-            if expanded:
-                st.session_state.expanded_movie = expander_key
