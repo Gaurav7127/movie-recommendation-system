@@ -164,16 +164,20 @@ if st.button("🚀 Let’s Go"):
 
     for index, movie in enumerate(recommendations):
         expander_key = f"expander_{index}"
+        
+        # Check if this movie should be expanded
         expanded = st.session_state.expanded_movie == expander_key
 
+        # Define expander
         with st.expander(f"📽️ {movie['title']} (More Info)", expanded=expanded):
-            st.markdown(f"<span style='color: #FFD700; font-size:18px; font-weight:bold;'>{movie['title']}</span>", unsafe_allow_html=True)
             st.image(movie['poster'], width=300)
-            st.markdown(f"<div class='movie-info'>⭐ <b>Rating:</b> {movie['rating']}/10</div>", unsafe_allow_html=True)
-            st.markdown(f"<div class='movie-info'>📅 <b>Release Date:</b> {movie['release_date']}</div>", unsafe_allow_html=True)
-            st.markdown(f"<div class='movie-info'>📖 <b>Plot:</b> {movie['plot']}</div>", unsafe_allow_html=True)
-            st.markdown(f"<div class='movie-info'>🎬 <b>Director:</b> {movie['director']}</div>", unsafe_allow_html=True)
-            st.markdown(f"<div class='movie-info'>🎭 <b>Cast:</b> {', '.join(movie['cast'])}</div>", unsafe_allow_html=True)
+            st.markdown(f"**⭐ Rating:** {movie['rating']}/10")
+            st.markdown(f"**📅 Release Date:** {movie['release_date']}")
+            st.markdown(f"**📖 Plot:** {movie['plot']}")
+            st.markdown(f"**🎬 Director:** {movie['director']}")
+            st.markdown(f"**🎭 Cast:** {', '.join(movie['cast'])}")
 
+            # Set session state to track the last opened movie
             if expanded:
                 st.session_state.expanded_movie = expander_key
+
