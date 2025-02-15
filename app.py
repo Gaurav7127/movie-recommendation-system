@@ -3,9 +3,8 @@ import pandas as pd
 import requests
 import pickle
 import base64
-import os
 
-
+# Load data
 movies_dict = pickle.load(open('movies_dict.pkl', 'rb'))
 movies = pd.DataFrame(movies_dict)
 similarity = pickle.load(open('similarity.pkl', 'rb'))
@@ -51,33 +50,34 @@ def recommend(movie):
     except Exception as e:
         return [{"title": "Error fetching recommendations", "poster": "", "rating": "", "release_date": "", "plot": "", "director": "", "cast": []}]
 
-def get_base64_image(image_path):
-    if os.path.exists(image_path):
-        with open(image_path, "rb") as img_file:
-            return base64.b64encode(img_file.read()).decode()
-    return None
+# Initialize session state to track which movie is expanded
+if "expanded_movie" not in st.session_state:
+    st.session_state.expanded_movie = None
 
-bg_image = get_base64_image('234234-1140x641.jpg')
+# Convert background image to Base64
+bg_base64 = base64.b64encode(bg_image).decode()
 
-if bg_image:
-    st.markdown(
+# Inject Custom CSS with your background image
+st.markdown(
     f"""
     <style>
     .stApp {{
-        background-image: url("data:image/jpeg;base64,{bg_image}");
+        background-image: url("data:image/jpeg;base64,{bg_base64}");
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
     }}
-     .title {{
+
+    .title {{
         font-size: 60px; 
-        color: #FFD700; 
+        color: #FFD700;  
         text-align: center;
         font-family: 'Arial Black', sans-serif;
         padding: 10px 0;
         text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
     }}
-      .subtitle {{
+
+    .subtitle {{
         font-size: 24px;
         color: #FFFFFF;
         text-align: center;
@@ -85,7 +85,8 @@ if bg_image:
         margin-top: -10px;
         padding-bottom: 20px;
         text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
-    }}  
+    }}
+
     .selectbox-label {{
         font-size: 20px;
         font-weight: bold;
@@ -94,32 +95,37 @@ if bg_image:
         margin-bottom: 10px;
         text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
     }}
+
     .movie-info {{
         font-size: 18px;
         color: #FFFFFF;
         text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
     }}
+
     details summary {{
-        color: rgba(255, 255, 255, 0.8) !important;  
+        color: rgba(255, 255, 255, 0.8) !important;
         font-weight: bold;
         font-size: 18px;
         transition: all 0.3s ease-in-out;
         padding: 10px;
         border-radius: 8px;
     }}
-   details summary:hover {{
-        color: #FFD700 !important;  /* Gold hover */
-        text-shadow: 0px 0px 8px rgba(255, 215, 0, 0.9);  
+
+    details summary:hover {{
+        color: #FFD700 !important;
+        text-shadow: 0px 0px 8px rgba(255, 215, 0, 0.9);
         transform: scale(1.05);
     }}
+
     details {{
-        background-color: rgba(0, 0, 0, 0.5) !important;  
+        background-color: rgba(0, 0, 0, 0.5) !important;
         border-radius: 8px;
         padding: 5px;
     }}
+
     button {{
-        background-color: #FFD700 !important; 
-        color: black !important; 
+        background-color: #FFD700 !important;
+        color: #000000 !important;
         font-weight: bold;
         border-radius: 10px;
         padding: 10px 20px;
@@ -127,36 +133,20 @@ if bg_image:
         box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
         transition: all 0.3s ease-in-out;
     }}
-   button:hover {{
+
+    button:hover {{
         background-color: #FFA500 !important;
         transform: scale(1.05);
     }}
+
     @media (max-width: 1024px) {{
-        .title {{
-            font-size: 40px;
-        }}
-        .subtitle {{
-            font-size: 18px;
-        }}
-        .movie-poster {{
-            height: 220px;
-            width: 150px;
-        }}
+        .title {{ font-size: 40px; }}
+        .subtitle {{ font-size: 18px; }}
     }}
+
     @media (max-width: 768px) {{
-        .title {{
-            font-size: 30px;
-        }}
-        .subtitle {{
-            font-size: 16px;
-        }}
-        .movie-poster {{
-            height: 180px;
-            width: 120px;
-        }}
-        .selectbox-label {{
-            font-size: 14px;
-        }}
+        .title {{ font-size: 30px; }}
+        .subtitle {{ font-size: 16px; }}
     }}
     </style>
     """,
@@ -172,8 +162,11 @@ selected_movie = st.selectbox("", movies["title"].values, key='movie_selectbox')
 if st.button("🚀 Let’s Go"):
     recommendations = recommend(selected_movie)
 
-    for movie in recommendations:
-        with st.expander(f"📽️ {movie['title']} (More Info)"):
+    for index, movie in enumerate(recommendations):
+        expander_key = f"expander_{index}"
+        expanded = st.session_state.expanded_movie == expander_key
+
+        with st.expander(f"📽️ {movie['title']} (More Info)", expanded=expanded):
             st.markdown(f"<span style='color: #FFD700; font-size:18px; font-weight:bold;'>{movie['title']}</span>", unsafe_allow_html=True)
             st.image(movie['poster'], width=300)
             st.markdown(f"<div class='movie-info'>⭐ <b>Rating:</b> {movie['rating']}/10</div>", unsafe_allow_html=True)
@@ -181,3 +174,6 @@ if st.button("🚀 Let’s Go"):
             st.markdown(f"<div class='movie-info'>📖 <b>Plot:</b> {movie['plot']}</div>", unsafe_allow_html=True)
             st.markdown(f"<div class='movie-info'>🎬 <b>Director:</b> {movie['director']}</div>", unsafe_allow_html=True)
             st.markdown(f"<div class='movie-info'>🎭 <b>Cast:</b> {', '.join(movie['cast'])}</div>", unsafe_allow_html=True)
+
+            if expanded:
+                st.session_state.expanded_movie = expander_key
