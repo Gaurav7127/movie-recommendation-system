@@ -59,19 +59,18 @@ def get_base64_image(image_path):
             return base64.b64encode(img_file.read()).decode()
     return None
 
-# Load and encode background image
-bg_base64 = get_base64_image('background.jpg')
 
-# Apply CSS with background image
-if bg_base64:
+bg_image = get_base64_image('234234-1140x641.jpg')
+
+if bg_image:
     st.markdown(
         f"""
-        <style>
-        .stApp {{
-            background-image: url("data:image/jpeg;base64,{bg_base64}");
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
+    <style>
+    .stApp {{
+        background-image: url("data:image/jpeg;base64,{bg_image}");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
         }}
         .title {{
             font-size: 60px; 
@@ -161,8 +160,7 @@ if st.button("🚀 Let’s Go"):
         expanded = st.session_state.expanded_movie == i
 
         with st.expander(f"📽️ {movie['title']} (More Info)", expanded=expanded):
-            if st.button(f"🔽 Open {movie['title']}", key=f"btn_{i}"):
-                st.session_state.expanded_movie = i  # Set this movie as expanded
+             st.session_state.expanded_movie = i  # Set this movie as expanded
             
             st.markdown(f"<span style='color: #FFD700; font-size:18px; font-weight:bold;'>{movie['title']}</span>", unsafe_allow_html=True)
             st.image(movie['poster'], width=300)
